@@ -7,7 +7,7 @@ models_dict_reversed = {value: key for key, value in models_dict.items()}
 
 st.set_page_config(
     page_title="My Chatbot",
-    page_icon="🤖",
+    # page_icon="",
     layout="wide",
     initial_sidebar_state="expanded",
 )
