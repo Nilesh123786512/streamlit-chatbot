@@ -3,6 +3,7 @@ from openai import OpenAI
 from tavily import TavilyClient
 import asyncio
 import re
+import streamlit as st
 
 models_dict = {
     0: "qwen-qwq-32b",
@@ -22,7 +23,7 @@ client1 = OpenAI(
     base_url="https://api.sree.shop/v1",
     # api_key=os.environ['groq_api']
     api_key=st.secrets["devsdocode"])
-    client2 = OpenAI(
+client2 = OpenAI(
     base_url="https://api.groq.com/openai/v1",
     # base_url="https://api.sree.shop/v1",
     api_key=st.secrets["groq_api"])
