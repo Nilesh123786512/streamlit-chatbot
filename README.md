@@ -40,7 +40,7 @@ This project is a Streamlit-based chatbot application that leverages the power o
 1.  **Clone the repository:** ⬇️
 
     ```bash
-    git clone https://github.com/YOUR_USERNAME/streamlit-chatbot.git
+    git clone https://github.com/Nilesh123786512/streamlit-chatbot.git
     cd streamlit-chatbot
     ```
 
