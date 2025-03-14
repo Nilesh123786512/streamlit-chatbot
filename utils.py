@@ -21,20 +21,20 @@ client1 = OpenAI(
     # base_url="https://api.groq.com/openai/v1",
     base_url="https://api.sree.shop/v1",
     # api_key=os.environ['groq_api']
-    api_key=os.environ['devsdocode'])
-client2 = OpenAI(
+    api_key=st.secrets["devsdocode"])
+    client2 = OpenAI(
     base_url="https://api.groq.com/openai/v1",
     # base_url="https://api.sree.shop/v1",
-    api_key=os.environ['groq_api']
+    api_key=st.secrets["groq_api"])
     # api_key=os.environ['devsdocode']
-)
+
 client3 = OpenAI(
     base_url="https://api.groq.com/openai/v1",
     # base_url="https://api.sree.shop/v1",
-    api_key=os.environ['groq_api2']
+    api_key=st.secrets["groq_api"])
     # api_key=os.environ['devsdocode']
-)
-tavily_client = TavilyClient(api_key=os.environ['tavily_1'])
+
+tavily_client = TavilyClient(api_key=st.secrets["tavily_1"])
 
 
 #Tavily search if asked
@@ -108,4 +108,3 @@ async def query_openai(conversation,
 
 
 
-        
