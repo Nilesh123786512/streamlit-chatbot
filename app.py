@@ -35,8 +35,8 @@ if not st.session_state.authenticated:
 
     code_input = st.text_input("Secret Code", type="password")
     if st.button("Submit"):
-        authenticate(code_input)
-        st.rerun()
+        if authenticate(code_input):
+            st.rerun()
 if st.session_state.authenticated:
     st.title("🤖 My Chatbot")
     # Initialize session state for conversation if not already present
