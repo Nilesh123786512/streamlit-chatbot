@@ -1,9 +1,11 @@
 import os
 from openai import OpenAI
-from tavily import TavilyClient
+# from tavily import TavilyClient
 import asyncio
 import re
 import streamlit as st
+from duckduckgo_search import DDGS
+
 
 models_dict = {
     0: "qwen-qwq-32b",
@@ -35,7 +37,9 @@ client3 = OpenAI(
     api_key=st.secrets["groq_api"])
     # api_key=os.environ['devsdocode']
 
-tavily_client = TavilyClient(api_key=st.secrets["tavily_1"])
+#Search client
+ddgs = DDGS()
+# tavily_client = TavilyClient(api_key=st.secrets["tavily_1"])
 
 
 #Tavily search if asked
@@ -47,18 +51,20 @@ async def search_tavily(query):
             "role":
             "system",
             "content":
-            "Based on all above queries give me a single search query enclosed in <search>content to search</search> that is relevant to collect information about the topic"
+            "Based on all above queries give me a single search query enclosed in <search>content to search</search> that is relevant to collect information about the topic.Also highlight the keywords that needs to be searched by **keyword**"
         })
 
         # print(f"Changed query:{query}")
         # query_filtered.choices[0].message.content
         query_filtered = client3.chat.completions.create(
             model="llama3-70b-8192", messages=query)
-        query_filtered = re.search(r'''<search>(.*?)</search>''',                                query_filtered.choices[0].message.content,
+        query_filtered = re.search(r'''<search>(.*?)</search>''',  query_filtered.choices[0].message.content,
                                    re.DOTALL)
-        # print(query_filtered)
-        response = tavily_client.search(query_filtered.group(1))
-        # print('Requested the query from tavily')
+        # response = tavily_client.search(query_filtered.group(1))
+        results = ddgs.text(query_filtered.group(1), max_results=5)
+        res=""
+        for i,r in enumerate(results):
+            res+=f'search{i+1}:\n{r['body']}\n'
         return response['results'][0]['content']
     except Exception as e:
         print(f'Exception is {e}')
