@@ -34,7 +34,7 @@ client2 = OpenAI(
 client3 = OpenAI(
     base_url="https://api.groq.com/openai/v1",
     # base_url="https://api.sree.shop/v1",
-    api_key=st.secrets["groq_api"])
+    api_key=st.secrets["groq_api2"])
     # api_key=os.environ['devsdocode']
 
 #Search client
