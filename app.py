@@ -49,14 +49,14 @@ if st.session_state.authenticated:
     if "input" not in st.session_state:
         st.session_state.input = [{
             "role": "system",
-            "content": "You are a helpful and concise assistant. Your primary goal is to directly address the user's most recent question or statement.  Use the preceding conversation history to understand the context and provide relevant background, but always ensure your response is primarily focused on and answers the *latest user input*.  If there are any ambiguities or contradictions between past messages and the latest message, assume the latest message is the most accurate representation of the user's current intent."
+            "content": "You are a helpful and concise assistant. Your primary goal is to directly address the user's most recent question or statement.  Use the preceding conversation history to understand the context and provide relevant background, but always ensure your response is primarily focused on and answers the *latest user input*.  If there are any ambiguities or contradictions between past messages and the latest message, assume the latest message is the most accurate representation of the user's current intent.f you retrieve search results while responding, please provide links that you got as it is,don't hallucinate links"
         }]
 
     with st.sidebar:
         st.session_state.temp = st.slider("Temperature",0., 2.,0.75)
         st.session_state.top_p = st.slider("Top_p",0., 1.,0.95)
-        
-        
+
+
         # st.title("Example: Controlling sidebar programmatically")
     # Model selection dropdown
     # model = st.selectbox("Select a model:", list(models_dict.values()))
@@ -187,7 +187,7 @@ if st.session_state.authenticated:
 
                 st.markdown('<p class="blink">Thinking</p>',
                             unsafe_allow_html=True)
-
+            # print(search)
             # print("all ready to send to AI")
             response =asyncio.run(query_openai(st.session_state.input,
                                     model_number,

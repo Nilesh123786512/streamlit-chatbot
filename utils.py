@@ -51,7 +51,7 @@ async def search_tavily(query):
             "role":
             "system",
             "content":
-            "Based on all above queries give me a single search query enclosed in <search>content to search</search> that is relevant to collect information about the topic.Also highlight the keywords that needs to be searched by **keyword**"
+            "Based on all above queries give me a single search query enclosed in <search>content to search</search>.If the query was straight forward then don't modify just enclose it else from context give the best query.Also highlight the keywords that needs to be searched by **keyword**"
         })
 
         # print(f"Changed query:{query}")
@@ -60,12 +60,13 @@ async def search_tavily(query):
             model="llama3-70b-8192", messages=query)
         query_filtered = re.search(r'''<search>(.*?)</search>''',  query_filtered.choices[0].message.content,
                                    re.DOTALL)
+        # print("Fetching query:",query_filtered.group(1))
         # response = tavily_client.search(query_filtered.group(1))
         results = ddgs.text(query_filtered.group(1), max_results=5)
         res=""
         for i,r in enumerate(results):
-            res+=f'search{i+1}:\n{r['body']}\n'
-        return response['results'][0]['content']
+            res+=f'[search{i+1}]({r["href"]}):\n{r["body"]}\n'
+        return res
     except Exception as e:
         print(f'Exception is {e}')
         return "Unable to fetch search results"
@@ -82,9 +83,9 @@ async def query_openai(conversation,
     """
     respo = None
     if search:
-        print(conversation[-1]['content'])
+        # print(conversation[-1]['content'])
         respo = await search_tavily(conversation)
-        print(f'response is provided by tavily {respo}')
+        # print(f'response is provided by tavily {respo}')
         conversation.append({
             "role":
             "system",
