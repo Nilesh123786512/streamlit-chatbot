@@ -1,3 +1,4 @@
 streamlit==1.43.0
 openai
-tavily-python
+duckduckgo-search
+# tavily-python

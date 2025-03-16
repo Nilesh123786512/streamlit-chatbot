@@ -44,7 +44,6 @@ This project is a Streamlit-based chatbot application that leverages the power o
     cd streamlit-chatbot
     ```
 
-    *(Replace `YOUR_USERNAME` with your actual GitHub username)*
 
 2.  **Install dependencies:** 🛠️
 
