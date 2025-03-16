@@ -24,9 +24,10 @@ SECRET_CODE = st.secrets["auth_code"]# Replace with your desired secret code
 def authenticate(code):
     if code == SECRET_CODE:
         st.session_state.authenticated = True
+        return True
     else:
         st.error("Incorrect code. Please try again.")
-
+        return False
 
 # --- Login Page ---
 if not st.session_state.authenticated:
@@ -59,7 +60,6 @@ if st.session_state.authenticated:
         # st.title("Example: Controlling sidebar programmatically")
     # Model selection dropdown
     # model = st.selectbox("Select a model:", list(models_dict.values()))
-    st.title("My Chatbot")
 
 
     hist_container = st.container()
