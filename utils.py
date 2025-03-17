@@ -23,15 +23,11 @@ models_dict = {
 
 ## Declaring the clients for different purposes
 client1 = OpenAI(
-    # base_url="https://api.groq.com/openai/v1",
     base_url="https://api.sree.shop/v1",
-    # api_key=os.environ['groq_api']
     api_key=st.secrets["devsdocode"])
 client2 = OpenAI(
     base_url="https://api.groq.com/openai/v1",
-    # base_url="https://api.sree.shop/v1",
     api_key=st.secrets["groq_api"])
-    # api_key=os.environ['devsdocode']
 
 client3 = OpenAI(
     base_url="https://api.groq.com/openai/v1",
@@ -39,9 +35,7 @@ client3 = OpenAI(
     api_key=st.secrets["groq_api2"])
 client4 = OpenAI(
     base_url="https://openrouter.ai/api/v1",
-    # base_url="https://api.sree.shop/v1",
     api_key=st.secrets["open_router"])
-    # api_key=os.environ['devsdocode']
 
 #Search client
 ddgs = DDGS()
