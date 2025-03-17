@@ -16,7 +16,9 @@ models_dict = {
     5: "deepseek-r1",
     6: "deepseek-v3",
     7: "claude-3-5-sonnet-20240620",
-    8: "gpt-4o-2024-05-13"
+    8: "gpt-4o-2024-05-13",
+    9: "deepseek/deepseek-chat:free",
+    10: "deepseek/deepseek-r1:free",
 }
 
 ## Declaring the clients for different purposes
@@ -35,6 +37,10 @@ client3 = OpenAI(
     base_url="https://api.groq.com/openai/v1",
     # base_url="https://api.sree.shop/v1",
     api_key=st.secrets["groq_api2"])
+client4 = OpenAI(
+    base_url="https://openrouter.ai/api/v1",
+    # base_url="https://api.sree.shop/v1",
+    api_key=st.secrets["open_router"])
     # api_key=os.environ['devsdocode']
 
 #Search client
@@ -101,6 +107,11 @@ async def query_openai(conversation,
                 temperature=temp,  # Set temperature to 0.7
                 top_p=top_p)
             # print(f"Response is {response.choices[0].message.content}")
+        elif model_number in [9, 10]:
+            response = client4.chat.completions.create(
+                model=models_dict[model_number], messages=conversation,
+                 temperature=temp,  # Set temperature to 0.7
+                top_p=top_p)
         else:
             response = client2.chat.completions.create(
                 model=models_dict[model_number], messages=conversation,
