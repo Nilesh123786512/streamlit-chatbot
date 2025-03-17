@@ -103,7 +103,9 @@ async def query_openai(conversation,
             # print(f"Response is {response.choices[0].message.content}")
         else:
             response = client2.chat.completions.create(
-                model=models_dict[model_number], messages=conversation)
+                model=models_dict[model_number], messages=conversation,
+                 temperature=temp,  # Set temperature to 0.7
+                top_p=top_p)
         return response.choices[0].message.content.strip()
     except Exception as e:
         raise e
