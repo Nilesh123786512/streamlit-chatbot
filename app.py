@@ -111,8 +111,8 @@ if st.session_state.authenticated:
                     if st.button("🔊"):
                         str=" ".join(split_text)
                         audio_data = generate_audio(str)
-                        with col2:
-                            play_audio(audio_data)
+                        # with col2:
+                        play_audio(audio_data)
                 
     
     new_reply_container = st.container()
