@@ -108,7 +108,7 @@ if st.session_state.authenticated:
             vertical_alignment="bottom"
                 ) 
                 with col1:
-                    if st.button("🔊")
+                    if st.button("🔊"):
                         str=" ".join(split_text)
                         audio_data = generate_audio(str)
                         with col2:
