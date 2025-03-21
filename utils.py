@@ -140,7 +140,7 @@ def generate_audio(text):
     else:
         print(f"Error: {response.status_code}")
 
-def play_audio(audio_data):
+def play_audio(audio_data,col2):
     if audio_data:
         # Convert audio data to base64
         b64 = base64.b64encode(audio_data).decode()
@@ -150,7 +150,8 @@ def play_audio(audio_data):
             Your browser does not support the audio element.
         </audio>
         """
-        st.components.v1.html(audio_html, height=100)
+        with col2:
+            st.components.v1.html(audio_html, height=100)
 
 
 

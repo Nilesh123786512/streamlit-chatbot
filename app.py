@@ -98,19 +98,19 @@ if st.session_state.authenticated:
                 # Split text around LaTeX expressions
                 split_text = re.split(r"\\\[(.*?)\\\]", main_content, flags=re.DOTALL)
                 split_text=[_tex for _tex in split_text if _tex not in latex_blocks]
-
+                col1,_,col2=st.columns([0.3,0.7,0.7])
                 # Render content correctly
                 for i in range(len(split_text)):
                     bot_message.markdown(split_text[i])  # Render text normally
                     if i < len(latex_blocks):  
                         bot_message.latex(latex_blocks[i].strip()) 
                 
-                # with col1:
-                if st.button("🔊", key=f"audio_button_{_ind}"):
-                    str=" ".join(split_text)
-                    audio_data = generate_audio(str)
-                    # with col2:
-                    play_audio(audio_data)
+                with col1:
+                    if st.button("🔊", key=f"audio_button_{_ind}"):
+                        str=" ".join(split_text)
+                        audio_data = generate_audio(str)
+                        with col2:
+                            play_audio(audio_data,col2)
                 
     
     new_reply_container = st.container()
