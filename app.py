@@ -3,6 +3,8 @@ from utils import query_openai, models_dict
 import streamlit as st
 import re
 import time
+from utils import generate_audio, play_audio
+
 models_dict_reversed = {value: key for key, value in models_dict.items()}
 
 st.set_page_config(
@@ -57,10 +59,6 @@ if st.session_state.authenticated:
         st.session_state.top_p = st.slider("Top_p",0., 1.,0.95)
 
 
-        # st.title("Example: Controlling sidebar programmatically")
-    # Model selection dropdown
-    # model = st.selectbox("Select a model:", list(models_dict.values()))
-
 
     hist_container = st.container()
     with hist_container:
@@ -99,16 +97,18 @@ if st.session_state.authenticated:
                 # Split text around LaTeX expressions
                 split_text = re.split(r"\\\[(.*?)\\\]", main_content, flags=re.DOTALL)
                 split_text=[_tex for _tex in split_text if _tex not in latex_blocks]
+
                 # Render content correctly
                 for i in range(len(split_text)):
                     bot_message.markdown(split_text[i])  # Render text normally
                     if i < len(latex_blocks):  
                         bot_message.latex(latex_blocks[i].strip()) 
-                # print(main_content)
-                # bot_message.markdown(main_content)
-
-
-
+                gen_aud=st.button("🔊")
+                if gen_aud:
+                    str=" ".join(split_text)
+                    audio_data = generate_audio(str)
+                    play_audio(audio_data)
+    
     new_reply_container = st.container()
 
     main_container = st.container()
@@ -195,11 +195,6 @@ if st.session_state.authenticated:
                                 temp=st.session_state.temp,
                                 top_p=st.session_state.top_p)
                                 )
-            # if response[1] is not None:
-            #     st.session_state.input.append({
-            #         "role": "system",
-            #         "content": f"The search results provided for context {response[1]}"
-            # })
             st.session_state.conversation.append({
                 "role": "assistant",
                 "content": response

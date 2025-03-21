@@ -1,5 +1,8 @@
 import os
 from openai import OpenAI
+import requests
+import base64
+from concurrent.futures import ThreadPoolExecutor
 # from tavily import TavilyClient
 import asyncio
 import re
@@ -117,8 +120,37 @@ async def query_openai(conversation,
         return f"Error: {e}"
 
 
+def generate_audio(text):
+    # Replace this URL with your actual API endpoint
+    api_url = "https://openfm.onrender.com/api/generate"
+    text= {
+    "input": text,
+    "voice": "shimmer",
+    "vibe": "null",
+    "customPrompt": "Voice Affect:Fast, Mystical and dreamy\nTone: Soft and enchanting\nPacing: FastnEmotion: Whimsical and magical\nPronunciation: Smooth and ethereal\nPauses: Strategic pauses for effect"
+}
+    headers = {
+    'Content-Type': 'application/json'
+}
+    response = requests.post(api_url, headers=headers, json=text)
 
+    if response.status_code == 200:
+        # print("Sound file downloaded successfully.")
+        return response.content
+    else:
+        print(f"Error: {response.status_code}")
 
+def play_audio(audio_data):
+    if audio_data:
+        # Convert audio data to base64
+        b64 = base64.b64encode(audio_data).decode()
+        audio_html = f"""
+        <audio controls>
+            <source src="data:audio/wav;base64,{b64}" type="audio/wav">
+            Your browser does not support the audio element.
+        </audio>
+        """
+        st.components.v1.html(audio_html, height=100)
 
 
 
