@@ -62,8 +62,8 @@ if st.session_state.authenticated:
 
     hist_container = st.container()
     with hist_container:
+        _ind=0
         for chat in st.session_state.conversation:
-            _ind=0
             if chat["role"] == "user":
                 user_msg = st.chat_message("user")
                 # st.markdown("### You")
