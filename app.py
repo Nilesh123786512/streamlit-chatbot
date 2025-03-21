@@ -63,12 +63,13 @@ if st.session_state.authenticated:
     hist_container = st.container()
     with hist_container:
         for chat in st.session_state.conversation:
-
+            _ind=0
             if chat["role"] == "user":
                 user_msg = st.chat_message("user")
                 # st.markdown("### You")
                 user_msg.text(f"{chat['content']}")
             elif chat["role"] == "assistant":
+                _ind+=1
                 thoughts_match = re.search(r'''<think>(.*?)</think>''',
                                         chat['content'], re.DOTALL)
                 main_content = re.sub(r'''<think>.*?</think>''',
@@ -105,7 +106,7 @@ if st.session_state.authenticated:
                         bot_message.latex(latex_blocks[i].strip()) 
                 
                 # with col1:
-                if st.button("🔊"):
+                if st.button("🔊", key=f"audio_button_{_ind}"):
                     str=" ".join(split_text)
                     audio_data = generate_audio(str)
                     # with col2:
