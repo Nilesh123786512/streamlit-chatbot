@@ -103,11 +103,17 @@ if st.session_state.authenticated:
                     bot_message.markdown(split_text[i])  # Render text normally
                     if i < len(latex_blocks):  
                         bot_message.latex(latex_blocks[i].strip()) 
-                gen_aud=st.button("🔊")
-                if gen_aud:
-                    str=" ".join(split_text)
-                    audio_data = generate_audio(str)
-                    play_audio(audio_data)
+                col1, col3, _, col2 = st.columns(
+            [1, 2, 1, 1],
+            vertical_alignment="bottom"
+                ) 
+                with col1:
+                    if st.button("🔊")
+                        str=" ".join(split_text)
+                        audio_data = generate_audio(str)
+                        with col2:
+                            play_audio(audio_data)
+                
     
     new_reply_container = st.container()
 
