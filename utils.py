@@ -8,7 +8,7 @@ import asyncio
 import re
 import streamlit as st
 from duckduckgo_search import DDGS
-import google.generativeai as genai
+
 # client5 = genai.Client(api_key=st.secrets['google'])
 
 models_dict = {
@@ -25,6 +25,7 @@ models_dict = {
     10: "deepseek/deepseek-r1:free",
     11: "gemini-2.0-flash",
     12: "gemini-2.0-pro-exp-02-05",
+    
 }
 
 ## Declaring the clients for different purposes
