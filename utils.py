@@ -22,6 +22,7 @@ models_dict = {
     8: "gpt-4o-2024-05-13",
     9: "deepseek/deepseek-chat:free",
     10: "deepseek/deepseek-r1:free",
+    11: "google/gemma-3-27b-it:free",
 }
 
 ## Declaring the clients for different purposes
@@ -104,7 +105,7 @@ async def query_openai(conversation,
                 temperature=temp,  # Set temperature to 0.7
                 top_p=top_p)
             # print(f"Response is {response.choices[0].message.content}")
-        elif model_number in [9, 10]:
+        elif model_number in [9, 10,11]:
             response = client4.chat.completions.create(
                 model=models_dict[model_number], messages=conversation,
                  temperature=temp,  # Set temperature to 0.7
@@ -140,6 +141,22 @@ def generate_audio(text):
     else:
         print(f"Error: {response.status_code}")
 
+def transcribe_audio(audio_data):
+    """Transcribe audio using Groq's whisper-large-v3-turbo"""
+    try:
+        # Create transcription request with raw bytes
+        print("Got input Transcribing......")
+        response = client3.audio.transcriptions.create(
+            model="whisper-large-v3-turbo",
+            file=("audio.wav", audio_data, "audio/wav"),
+            response_format="text"
+        )
+        print(f'Transcribed Sucessfully . response:{response}')
+        return response
+    except Exception as e:
+        print(f"Transcription error: {e}")
+        return None
+
 def play_audio(audio_data,col2):
     if audio_data:
         # Convert audio data to base64
@@ -152,7 +169,3 @@ def play_audio(audio_data,col2):
         """
         with col2:
             st.components.v1.html(audio_html, height=100)
-
-
-
-
