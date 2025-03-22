@@ -8,8 +8,8 @@ import asyncio
 import re
 import streamlit as st
 from duckduckgo_search import DDGS
-from google import genai
-client5 = genai.Client(api_key=st.secrets['google'])
+import google.generativeai as genai
+# client5 = genai.Client(api_key=st.secrets['google'])
 
 models_dict = {
     0: "qwen-qwq-32b",
@@ -23,7 +23,8 @@ models_dict = {
     8: "gpt-4o-2024-05-13",
     9: "deepseek/deepseek-chat:free",
     10: "deepseek/deepseek-r1:free",
-    11: "gemma-3-27b-it",
+    11: "gemini-2.0-flash",
+    12: "gemini-2.0-pro-exp-02-05",
 }
 
 ## Declaring the clients for different purposes
@@ -41,9 +42,9 @@ client3 = OpenAI(
 client4 = OpenAI(
     base_url="https://openrouter.ai/api/v1",
     api_key=st.secrets["open_router"])
-# client4 = OpenAI(
-#     base_url="https://openrouter.ai/api/v1",
-#     api_key=st.secrets["open_router"])
+client5 = OpenAI(
+    base_url="https://generativelanguage.googleapis.com/v1beta",
+    api_key=st.secrets['google'])
 
 #Search client
 ddgs = DDGS()
@@ -114,11 +115,12 @@ async def query_openai(conversation,
                 model=models_dict[model_number], messages=conversation,
                  temperature=temp,  # Set temperature to 0.7
                 top_p=top_p)
-        elif model_number in [11]:
-            response = client5.models.generate_content(
-    model=models_dict[model_number], contents="Explain how AI works in a few words"
-)
-            return response.text
+        elif model_number in [11,12]:
+            response = client5.chat.completions.create(
+                model=models_dict[model_number], messages=conversation,
+                 temperature=temp,  # Set temperature to 0.7
+                top_p=top_p)
+            # return response.text
 
         else:
             response = client2.chat.completions.create(
