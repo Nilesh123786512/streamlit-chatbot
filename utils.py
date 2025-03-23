@@ -76,6 +76,7 @@ async def search_tavily(query):
         res=""
         for i,r in enumerate(results):
             res+=f'[search{i+1}]({r["href"]}):\n{r["body"]}\n'
+        print(res)
         return res
     except Exception as e:
         print(f'Exception is {e}')
