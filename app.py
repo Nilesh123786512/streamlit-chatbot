@@ -151,8 +151,7 @@ if st.session_state.authenticated:
         })
         st.session_state.input.append({"role": "user", "content": user_message})
         with new_reply_container:
-            # Append user message only if it exists.
-            # st.markdown("### You"
+
             user_msg = st.chat_message("user")
             user_msg.text(user_message)
 
@@ -193,6 +192,7 @@ if st.session_state.authenticated:
                             unsafe_allow_html=True)
             # print(search)
             # print("all ready to send to AI")
+            print(f'Searching is kept : {search}')
             response =asyncio.run(query_openai(st.session_state.input,
                                     model_number,
                                     search=search,

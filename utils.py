@@ -64,13 +64,13 @@ async def search_tavily(query):
             "Based on all above queries give me a single search query enclosed in <search>content to search</search>.If the query was straight forward then don't modify just enclose it else from context give the best query.Also highlight the keywords that needs to be searched by **keyword**"
         })
 
-        # print(f"Changed query:{query}")
+        print(f"Changed query:{query}")
         # query_filtered.choices[0].message.content
         query_filtered = client3.chat.completions.create(
             model="llama3-70b-8192", messages=query)
         query_filtered = re.search(r'''<search>(.*?)</search>''',  query_filtered.choices[0].message.content,
                                    re.DOTALL)
-        # print("Fetching query:",query_filtered.group(1))
+        print("Fetching query:",query_filtered.group(1))
         # response = tavily_client.search(query_filtered.group(1))
         results = ddgs.text(query_filtered.group(1), max_results=5)
         res=""
@@ -92,11 +92,13 @@ async def query_openai(conversation,
     """
     Send the conversation history to the OpenAI Chat API and return the assistant's response.
     """
+    print(f'File:Utils,Got search in utils :{search}')
     respo = None
     if search:
         # print(conversation[-1]['content'])
+        # print(f'File:Utils,Got search in utils :{search}')
         respo = await search_tavily(conversation)
-        # print(f'response is provided by tavily {respo}')
+        print(f'response is provided by tavily {respo}')
         conversation.append({
             "role":
             "system",
