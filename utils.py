@@ -1,3 +1,5 @@
+import wave
+import contextlib
 import os
 from openai import OpenAI
 import requests
@@ -168,8 +170,8 @@ async def generate_audio(text):
         "voice": "shimmer",
         "vibe": "null",
         "customPrompt": "Voice Affect:Fast, Mystical and dreamy\n"
-                        "Tone: Soft and enchanting\n"
-                        "Pacing: Fast\n"
+                        "Tone: Soft and enchanting.Also keep the ups and down's in the tone\n"
+                        "Pacing:Be Fast\n"
                         "Emotion: Whimsical and magical\n"
                         "Pronunciation: Smooth and ethereal\n"
                         "Pauses: Strategic pauses for effect"
@@ -218,7 +220,7 @@ def play_audio(file_path,col2):
     #     with col2:
     #         st.components.v1.html(audio_html, height=100)
     with col2:
-        st.audio(file_path, format="audio/mp3")  # Directly play the MP3 file
+        st.audio(file_path, format="audio/wav")  # Directly play the MP3 file
 def split_text(text, max_length=980):
     sentences = re.split(r'(?<=[.!?])\s+', text)  # Split by sentence-ending punctuation
     parts = []
@@ -239,28 +241,70 @@ def split_text(text, max_length=980):
 
 
 
-async def generate_audio_total(text,output_filename="output.mp3"):
-    if len(text)<980:
+# async def generate_audio_total(text,output_filename="output.mp3"):
+#     if len(text)<980:
+#         return await generate_audio(text)
+#     else:
+#         split_parts=split_text(text)
+#         combined_audio = AudioSegment.empty()
+        
+#         for text in split_parts:
+#             # Fetch raw audio content asynchronously
+#             audio_data = await generate_audio(text)
+            
+#             # Load the audio into a BytesIO buffer
+#             mp3_fp = io.BytesIO(audio_data)
+#             mp3_fp.seek(0)  # Reset pointer
+            
+#             # Load the audio with pydub
+#             segment = AudioSegment.from_file(mp3_fp, format="mp3")
+#             combined_audio += segment
+            
+#             mp3_fp.close()  # Close the in-memory buffer
+#         if os.path.exists(output_filename):
+#             os.remove(output_filename)
+#         # Save to a file
+#         combined_audio.export(output_filename, format="mp3")
+#         print(f"Final audio saved as: {output_filename}")
+
+async def generate_audio_total(text, output_filename="output.wav"):
+    if len(text) < 980:
         return await generate_audio(text)
     else:
-        split_parts=split_text(text)
-        combined_audio = AudioSegment.empty()
-        
-        for text in split_parts:
-            # Fetch raw audio content asynchronously
-            audio_data = await generate_audio(text)
-            
-            # Load the audio into a BytesIO buffer
+        split_parts = split_text(text)
+        temp_wav_files = []
+
+        for i, text_part in enumerate(split_parts):
+            audio_data = await generate_audio(text_part)  # Get audio content
             mp3_fp = io.BytesIO(audio_data)
-            mp3_fp.seek(0)  # Reset pointer
-            
-            # Load the audio with pydub
+            mp3_fp.seek(0)
+
+            # Convert MP3 to WAV
             segment = AudioSegment.from_file(mp3_fp, format="mp3")
-            combined_audio += segment
-            
-            mp3_fp.close()  # Close the in-memory buffer
-        if os.path.exists(output_filename):
-            os.remove(output_filename)
-        # Save to a file
-        combined_audio.export(output_filename, format="mp3")
+            wav_filename = f"temp_part_{i}.wav"
+            segment.export(wav_filename, format="wav")
+            temp_wav_files.append(wav_filename)
+
+            mp3_fp.close()
+
+        # Merge WAV files
+        with wave.open(output_filename, "wb") as output_wav:
+            with contextlib.closing(wave.open(temp_wav_files[0], "rb")) as first_wav:
+                output_wav.setparams(first_wav.getparams())
+
+                for wav_file in temp_wav_files:
+                    with contextlib.closing(wave.open(wav_file, "rb")) as w:
+                        output_wav.writeframes(w.readframes(w.getnframes()))
+
+        # Cleanup temporary WAV files
+        for temp_file in temp_wav_files:
+            os.remove(temp_file)
+
         print(f"Final audio saved as: {output_filename}")
+
+        # # Optional: Convert the final WAV to MP3 if needed
+        # final_mp3 = output_filename.replace(".wav", ".mp3")
+        # AudioSegment.from_wav(output_filename).export(final_mp3, format="mp3")
+        # print(f"Final MP3 saved as: {final_mp3}")
+        return output_filename
+        # return final_mp3

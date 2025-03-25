@@ -108,9 +108,10 @@ if st.session_state.authenticated:
                 with col1:
                     if st.button("🔊", key=f"audio_button_{_ind}"):
                         str=" ".join(split_text)
-                        asyncio.run(generate_audio_total(str))
+                        fil_audio_name=asyncio.run(generate_audio_total(str))
                         with col2:
-                            play_audio("output.mp3",col2)
+                            # play_audio("output.wav",col2)
+                            play_audio(fil_audio_name,col2)
                 
     
     new_reply_container = st.container()
