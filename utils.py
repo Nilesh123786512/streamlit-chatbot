@@ -225,7 +225,7 @@ def play_audio(file_path,col2):
             st.audio(file_path, format="audio/wav")
         else:
             st.audio(file_path, format="audio/mp3")
-        st.audio(file_path, format="audio/wav")  # Directly play the MP3 file
+        # st.audio(file_path, format="audio/wav")  # Directly play the MP3 file
 def split_text(text, max_length=980):
     sentences = re.split(r'(?<=[.!?])\s+', text)  # Split by sentence-ending punctuation
     parts = []
