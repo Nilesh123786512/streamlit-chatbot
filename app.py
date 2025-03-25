@@ -3,7 +3,7 @@ from utils import query_openai, models_dict
 import streamlit as st
 import re
 import time
-from utils import generate_audio, play_audio
+from utils import generate_audio_total, play_audio
 
 models_dict_reversed = {value: key for key, value in models_dict.items()}
 
@@ -55,7 +55,7 @@ if st.session_state.authenticated:
         }]
 
     with st.sidebar:
-        st.session_state.temp = st.slider("Temperature",0., 2.,0.75)
+        st.session_state.temp = st.slider("Temperature",0., 2.,0.6)
         st.session_state.top_p = st.slider("Top_p",0., 1.,0.95)
 
 
@@ -108,9 +108,9 @@ if st.session_state.authenticated:
                 with col1:
                     if st.button("🔊", key=f"audio_button_{_ind}"):
                         str=" ".join(split_text)
-                        audio_data = generate_audio(str)
+                        asyncio.run(generate_audio_total(str))
                         with col2:
-                            play_audio(audio_data,col2)
+                            play_audio("output.mp3",col2)
                 
     
     new_reply_container = st.container()

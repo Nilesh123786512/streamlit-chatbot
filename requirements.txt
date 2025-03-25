@@ -1,5 +1,7 @@
 streamlit==1.43.0
 openai
 duckduckgo-search
-google
+#google
+pydub
+#ffmpeg
 # tavily-python

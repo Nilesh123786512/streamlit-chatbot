@@ -3,12 +3,13 @@ from openai import OpenAI
 import requests
 import base64
 from concurrent.futures import ThreadPoolExecutor
-# from tavily import TavilyClient
+import io
 import asyncio
 import re
 import streamlit as st
 from duckduckgo_search import DDGS
-
+import httpx
+from pydub import AudioSegment
 # client5 = genai.Client(api_key=st.secrets['google'])
 
 models_dict = {
@@ -137,25 +138,56 @@ async def query_openai(conversation,
         return f"Error: {e}"
 
 
-def generate_audio(text):
-    # Replace this URL with your actual API endpoint
+# async def generate_audio(text):
+#     # Replace this URL with your actual API endpoint
+#     api_url = "https://openfm.onrender.com/api/generate"
+#     text= {
+#     "input": text,
+#     "voice": "shimmer",
+#     "vibe": "null",
+#     "customPrompt": "Voice Affect:Fast, Mystical and dreamy\nTone: Soft and enchanting\nPacing: FastnEmotion: Whimsical and magical\nPronunciation: Smooth and ethereal\nPauses: Strategic pauses for effect"
+# }
+#     headers = {
+#     'Content-Type': 'application/json'
+# }
+#     response =await requests.post(api_url, headers=headers, json=text)
+
+#     if response.status_code == 200:
+#         # print("Sound file downloaded successfully.")
+#         return response.content
+#     else:
+#         print(f"Error: {response.status_code}")
+async def generate_audio(text):
+    """
+    Fetches TTS audio data asynchronously from an external API.
+    """
     api_url = "https://openfm.onrender.com/api/generate"
-    text= {
-    "input": text,
-    "voice": "shimmer",
-    "vibe": "null",
-    "customPrompt": "Voice Affect:Fast, Mystical and dreamy\nTone: Soft and enchanting\nPacing: FastnEmotion: Whimsical and magical\nPronunciation: Smooth and ethereal\nPauses: Strategic pauses for effect"
-}
+    
+    payload = {
+        "input": text,
+        "voice": "shimmer",
+        "vibe": "null",
+        "customPrompt": "Voice Affect:Fast, Mystical and dreamy\n"
+                        "Tone: Soft and enchanting\n"
+                        "Pacing: Fast\n"
+                        "Emotion: Whimsical and magical\n"
+                        "Pronunciation: Smooth and ethereal\n"
+                        "Pauses: Strategic pauses for effect"
+    }
+
     headers = {
-    'Content-Type': 'application/json'
-}
-    response = requests.post(api_url, headers=headers, json=text)
+        'Content-Type': 'application/json'
+    }
+
+    async with httpx.AsyncClient(timeout=60.0) as client:
+        response = await client.post(api_url, headers=headers, json=payload)
 
     if response.status_code == 200:
-        # print("Sound file downloaded successfully.")
-        return response.content
+        return response.content  # Return raw audio bytes
     else:
-        print(f"Error: {response.status_code}")
+        print(f"Error: {response.status_code} - {response.text}")
+        return None  # Handle failure case
+
 
 def transcribe_audio(audio_data):
     """Transcribe audio using Groq's whisper-large-v3-turbo"""
@@ -173,15 +205,62 @@ def transcribe_audio(audio_data):
         print(f"Transcription error: {e}")
         return None
 
-def play_audio(audio_data,col2):
-    if audio_data:
-        # Convert audio data to base64
-        b64 = base64.b64encode(audio_data).decode()
-        audio_html = f"""
-        <audio controls>
-            <source src="data:audio/wav;base64,{b64}" type="audio/wav">
-            Your browser does not support the audio element.
-        </audio>
-        """
-        with col2:
-            st.components.v1.html(audio_html, height=100)
+def play_audio(file_path,col2):
+    # if audio_data:
+    #     # Convert audio data to base64
+    #     b64 = base64.b64encode(audio_data).decode()
+    #     audio_html = f"""
+    #     <audio controls>
+    #         <source src="data:audio/wav;base64,{b64}" type="audio/wav">
+    #         Your browser does not support the audio element.
+    #     </audio>
+    #     """
+    #     with col2:
+    #         st.components.v1.html(audio_html, height=100)
+    with col2:
+        st.audio(file_path, format="audio/mp3")  # Directly play the MP3 file
+def split_text(text, max_length=980):
+    sentences = re.split(r'(?<=[.!?])\s+', text)  # Split by sentence-ending punctuation
+    parts = []
+    current_part = ""
+
+    for sentence in sentences:
+        if len(current_part) + len(sentence) + 1 <= max_length:  # +1 for space
+            current_part += " " + sentence if current_part else sentence
+        else:
+            parts.append(current_part.strip())  # Store the current part
+            current_part = sentence  # Start a new part
+
+    if current_part:
+        parts.append(current_part.strip())  # Add the last part
+
+    return parts
+
+
+
+
+async def generate_audio_total(text,output_filename="output.mp3"):
+    if len(text)<980:
+        return await generate_audio(text)
+    else:
+        split_parts=split_text(text)
+        combined_audio = AudioSegment.empty()
+        
+        for text in split_parts:
+            # Fetch raw audio content asynchronously
+            audio_data = await generate_audio(text)
+            
+            # Load the audio into a BytesIO buffer
+            mp3_fp = io.BytesIO(audio_data)
+            mp3_fp.seek(0)  # Reset pointer
+            
+            # Load the audio with pydub
+            segment = AudioSegment.from_file(mp3_fp, format="mp3")
+            combined_audio += segment
+            
+            mp3_fp.close()  # Close the in-memory buffer
+        if os.path.exists(output_filename):
+            os.remove(output_filename)
+        # Save to a file
+        combined_audio.export(output_filename, format="mp3")
+        print(f"Final audio saved as: {output_filename}")
