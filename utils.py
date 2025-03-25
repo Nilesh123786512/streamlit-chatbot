@@ -275,8 +275,10 @@ def split_text(text, max_length=980):
 async def generate_audio_total(text, output_filename="output.wav"):
     if len(text) < 980:
         audio_data= await generate_audio(text)
+        output_filename='output.mp3'
         with open(output_filename, "wb") as mp3_fp:
             mp3_fp.write(audio_data)
+        return output_filename
     else:
         split_parts = split_text(text)
         temp_wav_files = []
