@@ -1,4 +1,5 @@
 import wave
+import miniaudio
 import contextlib
 import os
 from openai import OpenAI
@@ -273,16 +274,30 @@ async def generate_audio_total(text, output_filename="output.wav"):
     else:
         split_parts = split_text(text)
         temp_wav_files = []
-
+    
         for i, text_part in enumerate(split_parts):
             audio_data = await generate_audio(text_part)  # Get audio content
-            mp3_fp = io.BytesIO(audio_data)
-            mp3_fp.seek(0)
-
-            # Convert MP3 to WAV
-            segment = AudioSegment.from_file(mp3_fp, format="mp3")
+            mp3_filename = f"temp_part_{i}.mp3"
+            with open(mp3_filename, "wb") as mp3_fp:
+                mp3_fp.write(audio_data)
+            mp3_fp.close()
             wav_filename = f"temp_part_{i}.wav"
-            segment.export(wav_filename, format="wav")
+            with open(mp3_filename, "rb") as f:
+                mp3_data = f.read()
+            decoded_audio= miniaudio.decode(mp3_data)
+            pcm_data, sample_rate, num_channels=decoded_audio.samples,decoded_audio.sample_rate,decoded_audio.nchannels
+            # pcm_data, sample_rate, num_channels = miniaudio.decode(audio_data)
+    
+            # Write PCM data into a WAV file using the wave module.
+            # Here, we assume the PCM data is 16-bit.
+            with wave.open(wav_filename, 'wb') as wav_file:
+                wav_file.setnchannels(num_channels)
+                wav_file.setsampwidth(2)  # 2 bytes for 16-bit audio
+                wav_file.setframerate(sample_rate)
+                wav_file.writeframes(pcm_data)
+            os.remove(mp3_filename)
+            
+            
             temp_wav_files.append(wav_filename)
 
             mp3_fp.close()
@@ -302,9 +317,5 @@ async def generate_audio_total(text, output_filename="output.wav"):
 
         print(f"Final audio saved as: {output_filename}")
 
-        # # Optional: Convert the final WAV to MP3 if needed
-        # final_mp3 = output_filename.replace(".wav", ".mp3")
-        # AudioSegment.from_wav(output_filename).export(final_mp3, format="mp3")
-        # print(f"Final MP3 saved as: {final_mp3}")
         return output_filename
         # return final_mp3
