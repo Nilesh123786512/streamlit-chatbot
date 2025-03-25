@@ -182,7 +182,7 @@ async def generate_audio(text):
         'Content-Type': 'application/json'
     }
 
-    async with httpx.AsyncClient(timeout=60.0) as client:
+    async with httpx.AsyncClient(timeout=90.0) as client:
         response = await client.post(api_url, headers=headers, json=payload)
 
     if response.status_code == 200:
@@ -221,6 +221,10 @@ def play_audio(file_path,col2):
     #     with col2:
     #         st.components.v1.html(audio_html, height=100)
     with col2:
+        if file_path.endswith(".wav"):
+            st.audio(file_path, format="audio/wav")
+        else:
+            st.audio(file_path, format="audio/mp3")
         st.audio(file_path, format="audio/wav")  # Directly play the MP3 file
 def split_text(text, max_length=980):
     sentences = re.split(r'(?<=[.!?])\s+', text)  # Split by sentence-ending punctuation
@@ -270,7 +274,9 @@ def split_text(text, max_length=980):
 
 async def generate_audio_total(text, output_filename="output.wav"):
     if len(text) < 980:
-        return await generate_audio(text)
+        audio_data= await generate_audio(text)
+        with open(output_filename, "wb") as mp3_fp:
+            mp3_fp.write(audio_data)
     else:
         split_parts = split_text(text)
         temp_wav_files = []
