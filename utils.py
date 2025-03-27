@@ -21,12 +21,13 @@ models_dict = {
     2: "qwen-2.5-coder-32b",
     3: "deepseek-r1-distill-qwen-32b",
     4: "deepseek-r1-distill-llama-70b",
-    5: "deepseek-r1",
-    6: "deepseek-v3",
-    7: "claude-3-5-sonnet-20240620",
-    8: "gpt-4o-2024-05-13",
+    13: "deepseek/deepseek-chat-v3-0324:free",
     9: "deepseek/deepseek-chat:free",
     10: "deepseek/deepseek-r1:free",
+    8: "gpt-4o-2024-05-13",
+    7: "claude-3-5-sonnet-20240620",
+    5: "deepseek-r1",
+    6: "deepseek-v3",
     11: "gemini-2.0-flash",
     12: "gemini-2.0-pro-exp-02-05",
     
@@ -118,7 +119,7 @@ async def query_openai(conversation,
                 temperature=temp,  # Set temperature to 0.7
                 top_p=top_p)
             # print(f"Response is {response.choices[0].message.content}")
-        elif model_number in [9, 10]:
+        elif model_number in [9, 10,13]:
             response = client4.chat.completions.create(
                 model=models_dict[model_number], messages=conversation,
                  temperature=temp,  # Set temperature to 0.7
