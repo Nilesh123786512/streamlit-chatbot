@@ -61,61 +61,7 @@ if st.session_state.authenticated:
 
 
     hist_container = st.container()
-    with hist_container:
-        _ind=0
-        for chat in st.session_state.conversation:
-            if chat["role"] == "user":
-                user_msg = st.chat_message("user")
-                # st.markdown("### You")
-                user_msg.text(f"{chat['content']}")
-            elif chat["role"] == "assistant":
-                _ind+=1
-                thoughts_match = re.search(r'''<think>(.*?)</think>''',
-                                        chat['content'], re.DOTALL)
-                main_content = re.sub(r'''<think>.*?</think>''',
-                                    '',
-                                    chat['content'],
-                                    flags=re.DOTALL)
-                # st.markdown("### Bot")
-                if thoughts_match:
-                    thoughts = thoughts_match.group(1)
-                    thoughts = re.sub(r"\\\[\s*", "$$", thoughts)
-                    thoughts = re.sub(r"\s*\\\]", "$$", thoughts)
-                    thoughts = re.sub(r"\\\(\s*", "$", thoughts)
-                    thoughts = re.sub(r"\s*\\\)", "$", thoughts)
-                    with st.expander("Thoughts"):
-                        st.write(thoughts)
-                # print(main_content)
-                # print(main_content)
-        # main_content = re.sub(r"\\\[\s(.*?)\s\\\]", "$$\1$$", main_content)
-                # main_content = re.sub(r"\\\[\s*", "$$", main_content)
-                main_content = re.sub(r"\\\(\s*", "$", main_content)
-                main_content = re.sub(r"\s*\\\)", "$", main_content)
-                bot_message= st.chat_message("assistant")
-                # main_content = re.sub(r"\s*\\\]", "$$", main_content)
-                latex_blocks = re.findall(r"\\\[(.*?)\\\]", main_content, re.DOTALL)
-
-                # Split text around LaTeX expressions
-                split_text = re.split(r"\\\[(.*?)\\\]", main_content, flags=re.DOTALL)
-                split_text=[_tex for _tex in split_text if _tex not in latex_blocks]
-                col1,_,col2=st.columns([0.3,0.7,0.7])
-                # Render content correctly
-                for i in range(len(split_text)):
-                    bot_message.markdown(split_text[i])  # Render text normally
-                    if i < len(latex_blocks):  
-                        bot_message.latex(latex_blocks[i].strip()) 
-                
-                with col1:
-                    if st.button("🔊", key=f"audio_button_{_ind}"):
-                        str=" ".join(split_text)
-                        fil_audio_name=asyncio.run(generate_audio_total(str))
-                        with col2:
-                            # play_audio("output.wav",col2)
-                            play_audio(fil_audio_name,col2)
-                
-    
     new_reply_container = st.container()
-
     main_container = st.container()
     with main_container:
         # Use columns only for the selectbox (chat input stays outside)
@@ -144,6 +90,10 @@ if st.session_state.authenticated:
             search = st.toggle("Search")
 
         user_message = st.chat_input("Type your message here...")
+    
+
+
+
 
     if user_message:
         st.session_state.conversation.append({
@@ -205,3 +155,75 @@ if st.session_state.authenticated:
                 "content": response
             })
             st.rerun()
+
+    with hist_container:
+        _ind=0
+        for chat in st.session_state.conversation:
+            if chat["role"] == "user":
+                user_msg = st.chat_message("user")
+                # st.markdown("### You")
+                user_msg.text(f"{chat['content']}")
+            elif chat["role"] == "assistant":
+                _ind+=1
+                thoughts_match = re.search(r'''<think>(.*?)</think>''',
+                                        chat['content'], re.DOTALL)
+                main_content = re.sub(r'''<think>.*?</think>''',
+                                    '',
+                                    chat['content'],
+                                    flags=re.DOTALL)
+                # st.markdown("### Bot")
+                if thoughts_match:
+                    thoughts = thoughts_match.group(1)
+                    thoughts = re.sub(r"\\\[\s*", "$$", thoughts)
+                    thoughts = re.sub(r"\s*\\\]", "$$", thoughts)
+                    thoughts = re.sub(r"\\\(\s*", "$", thoughts)
+                    thoughts = re.sub(r"\s*\\\)", "$", thoughts)
+                    with st.expander("Thoughts"):
+                        st.write(thoughts)
+                # print(main_content)
+                # print(main_content)
+        # main_content = re.sub(r"\\\[\s(.*?)\s\\\]", "$$\1$$", main_content)
+                # main_content = re.sub(r"\\\[\s*", "$$", main_content)
+                main_content = re.sub(r"\\\(\s*", "$", main_content)
+                main_content = re.sub(r"\s*\\\)", "$", main_content)
+                bot_message= st.chat_message("assistant")
+                # main_content = re.sub(r"\s*\\\]", "$$", main_content)
+                latex_blocks = re.findall(r"\\\[(.*?)\\\]", main_content, re.DOTALL)
+
+                # Split text around LaTeX expressions
+                split_text = re.split(r"\\\[(.*?)\\\]", main_content, flags=re.DOTALL)
+                split_text=[_tex for _tex in split_text if _tex not in latex_blocks]
+                col1,colrerun,_,col2=st.columns([0.15,0.15,0.7,0.7])
+                # Render content correctly
+                for i in range(len(split_text)):
+                    bot_message.markdown(split_text[i])  # Render text normally
+                    if i < len(latex_blocks):  
+                        bot_message.latex(latex_blocks[i].strip()) 
+                
+                with col1:
+                    if st.button("🔊", key=f"audio_button_{_ind}"):
+                        str=" ".join(split_text)
+                        fil_audio_name=asyncio.run(generate_audio_total(str))
+                        with col2:
+                            # play_audio("output.wav",col2)
+                            play_audio(fil_audio_name,col2)
+                    # Add regenerate button
+                with colrerun:
+                    model_number = models_dict_reversed.get(model)
+                    if st.button("🔄", key=f"regenerate_{_ind}", help="Regenerate this response"):
+                        # last_user_msg = next((msg for msg in reversed(st.session_state.conversation) if msg["role"] == "user"), None)
+                        # if last_user_msg:
+                            response = asyncio.run(query_openai(
+                                st.session_state.input,
+                                model_number,
+                                search=search,
+                                temp=st.session_state.temp,
+                                top_p=st.session_state.top_p
+                            ))
+                            st.session_state.conversation[-1]["content"] = response
+                            st.rerun()
+
+                
+    
+
+    
