@@ -193,7 +193,7 @@ if st.session_state.authenticated:
                 # Split text around LaTeX expressions
                 split_text = re.split(r"\\\[(.*?)\\\]", main_content, flags=re.DOTALL)
                 split_text=[_tex for _tex in split_text if _tex not in latex_blocks]
-                col1,colrerun,_,col2=st.columns([0.15,0.15,0.7,0.7])
+                col1,colrerun,_,col2=st.columns([0.10,0.12,0.7,0.7])
                 # Render content correctly
                 for i in range(len(split_text)):
                     bot_message.markdown(split_text[i])  # Render text normally
