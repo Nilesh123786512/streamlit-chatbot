@@ -4,6 +4,6 @@ duckduckgo-search
 #google
 miniaudio
 # st-copy-to-clipboard
-pydub
+#pydub
 #ffmpeg
 # tavily-python
