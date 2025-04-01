@@ -22,6 +22,7 @@ models_dict = {
     2: "qwen-2.5-coder-32b",
     3: "deepseek-r1-distill-qwen-32b",
     4: "deepseek-r1-distill-llama-70b",
+    14: "gemini-2.5-pro-exp-03-25",
     13: "deepseek/deepseek-chat-v3-0324:free",
     9: "deepseek/deepseek-chat:free",
     10: "deepseek/deepseek-r1:free",
@@ -125,7 +126,7 @@ async def query_openai(conversation,
                 model=models_dict[model_number], messages=conversation,
                  temperature=temp,  # Set temperature to 0.7
                 top_p=top_p)
-        elif model_number in [11,12]:
+        elif model_number in [11,12,14]:
             response = client5.chat.completions.create(
                 model=models_dict[model_number], messages=conversation,
                  temperature=temp,  # Set temperature to 0.7
