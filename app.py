@@ -46,7 +46,7 @@ if st.session_state.authenticated:
     if "conversation" not in st.session_state:
         st.session_state.conversation = [{
             "role": "system",
-            "content": "You are a helpful assistant."
+            "content": "You are a helpful and concise assistant. Your primary goal is to directly address the user's most recent question or statement.  Use the preceding conversation history to understand the context and provide relevant background, but always ensure your response is primarily focused on and answers the *latest user input*.  If there are any ambiguities or contradictions between past messages and the latest message, assume the latest message is the most accurate representation of the user's current intent.f you retrieve search results while responding, please provide links that you got as it is,don't hallucinate links"
         }]
     if "input" not in st.session_state:
         st.session_state.input = [{
@@ -88,73 +88,7 @@ if st.session_state.authenticated:
                 st.rerun()
         with col1:
             search = st.toggle("Search")
-
         user_message = st.chat_input("Type your message here...")
-    
-
-
-
-
-    if user_message:
-        st.session_state.conversation.append({
-            "role": "user",
-            "content": user_message
-        })
-        st.session_state.input.append({"role": "user", "content": user_message})
-        with new_reply_container:
-
-            user_msg = st.chat_message("user")
-            user_msg.text(user_message)
-
-            # bot_message.write('thinking')
-
-            model_number = models_dict_reversed.get(model)
-            # Set think flag based on model_number.
-            if model_number in [2, 3, 4]:
-                st.session_state.think = True
-            else:
-                st.session_state.think = False
-
-            # Query the model
-            ass_message_place = st.empty()
-            with ass_message_place.container():
-
-                # Define the CSS for the blinking effect
-                blink_css = """
-                <style>
-                @keyframes blink {
-                    0% { opacity: 1; }
-                    50% { opacity: 0; }
-                    100% { opacity: 1; }
-                }
-                .blink {
-                    animation: blink 1s infinite;
-                }
-                </style>
-                """
-
-                # Apply the CSS
-                st.markdown(blink_css, unsafe_allow_html=True)
-
-                # Display blinking text
-                # st.markdown('<p class="blink">This text will blink</p>', unsafe_allow_html=True)
-
-                st.markdown('<p class="blink">Thinking</p>',
-                            unsafe_allow_html=True)
-            # print(search)
-            # print("all ready to send to AI")
-            print(f'Searching is kept : {search}')
-            response =asyncio.run(query_openai(st.session_state.input,
-                                    model_number,
-                                    search=search,
-                                temp=st.session_state.temp,
-                                top_p=st.session_state.top_p)
-                                )
-            st.session_state.conversation.append({
-                "role": "assistant",
-                "content": response
-            })
-            st.rerun()
 
     with hist_container:
         _ind=0
@@ -213,6 +147,15 @@ if st.session_state.authenticated:
                     if st.button("🔄", key=f"regenerate_{_ind}", help="Regenerate this response"):
                         # last_user_msg = next((msg for msg in reversed(st.session_state.conversation) if msg["role"] == "user"), None)
                         # if last_user_msg:
+                        if model_number in [9,13,11,10,14]:
+                            response = asyncio.run(query_openai(
+                                st.session_state.conversation,
+                                model_number,
+                                search=search,
+                                temp=st.session_state.temp,
+                                top_p=st.session_state.top_p
+                            ))
+                        else:
                             response = asyncio.run(query_openai(
                                 st.session_state.input,
                                 model_number,
@@ -222,6 +165,81 @@ if st.session_state.authenticated:
                             ))
                             st.session_state.conversation[-1]["content"] = response
                             st.rerun()
+
+
+
+
+
+    
+    if user_message:
+        st.session_state.conversation.append({
+            "role": "user",
+            "content": user_message
+        })
+        st.session_state.input.append({"role": "user", "content": user_message})
+        with new_reply_container:
+
+            user_msg = st.chat_message("user")
+            user_msg.text(user_message)
+
+            # bot_message.write('thinking')
+
+            model_number = models_dict_reversed.get(model)
+            # Set think flag based on model_number.
+            if model_number in [2, 3, 4]:
+                st.session_state.think = True
+            else:
+                st.session_state.think = False
+
+            # Query the model
+            ass_message_place = st.empty()
+            with ass_message_place.container():
+
+                # Define the CSS for the blinking effect
+                blink_css = """
+                <style>
+                @keyframes blink {
+                    0% { opacity: 1; }
+                    50% { opacity: 0; }
+                    100% { opacity: 1; }
+                }
+                .blink {
+                    animation: blink 1s infinite;
+                }
+                </style>
+                """
+
+                # Apply the CSS
+                st.markdown(blink_css, unsafe_allow_html=True)
+
+                # Display blinking text
+                # st.markdown('<p class="blink">This text will blink</p>', unsafe_allow_html=True)
+
+                st.markdown('<p class="blink">Thinking</p>',
+                            unsafe_allow_html=True)
+            # print(search)
+            # print("all ready to send to AI")
+            print(f'Searching is kept : {search}')
+            if model_number in [9,13,11,10,14]:
+                response =asyncio.run(query_openai(st.session_state.conversation,
+                                        model_number,
+                                        search=search,
+                                    temp=st.session_state.temp,
+                                    top_p=st.session_state.top_p)
+                                    )
+            else:
+                response =asyncio.run(query_openai(st.session_state.input,
+                                        model_number,
+                                        search=search,
+                                    temp=st.session_state.temp,
+                                    top_p=st.session_state.top_p)
+                                    )
+
+            st.session_state.conversation.append({
+                "role": "assistant",
+                "content": response
+            })
+            st.rerun()
 
                 
     
