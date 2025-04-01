@@ -12,7 +12,6 @@ import re
 import streamlit as st
 from duckduckgo_search import DDGS
 import httpx
-from pydub import AudioSegment
 import streamlit.components.v1 as components
 # client5 = genai.Client(api_key=st.secrets['google'])
 
