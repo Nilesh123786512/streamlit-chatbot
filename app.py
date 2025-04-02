@@ -155,6 +155,8 @@ if st.session_state.authenticated:
                                 temp=st.session_state.temp,
                                 top_p=st.session_state.top_p
                             ))
+                            st.session_state.conversation[-1]["content"] = response
+                            st.rerun()
                         else:
                             response = asyncio.run(query_openai(
                                 st.session_state.input,
