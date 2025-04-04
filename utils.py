@@ -53,13 +53,14 @@ client5 = OpenAI(
     base_url="https://generativelanguage.googleapis.com/v1beta",
     api_key=st.secrets['google'])
 
-#Search client
-ddgs = DDGS()
+
 # tavily_client = TavilyClient(api_key=st.secrets["tavily_1"])
 
 
 #Tavily search if asked
 async def search_tavily(query):
+    #Search client
+    ddgs = DDGS()
     # print(f'Got query {query}')
     try:
         query = query.copy()
