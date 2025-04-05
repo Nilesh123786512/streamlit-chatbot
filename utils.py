@@ -88,7 +88,13 @@ async def search_tavily(query):
         print(f'Exception is {e}')
         return "Unable to fetch search results"
 
-
+def stream_data_(stream):
+    resp=""
+    for chunk in stream:
+        yield chunk.choices[0].delta.content
+        resp+=chunk.choices[0].delta.content
+    return resp
+        
 # openai.api_key = "your_openai_api_key"  # Replace with your actual OpenAI API key
 async def query_openai(conversation,
                        model_number=1,
@@ -116,20 +122,28 @@ async def query_openai(conversation,
             print(f"Conversation :{conversation}")
             response = client1.chat.completions.create(
                 model=models_dict[model_number],
+                stream=False,
                 messages=conversation,
                 temperature=temp,  # Set temperature to 0.7
                 top_p=top_p)
             # print(f"Response is {response.choices[0].message.content}")
         elif model_number in [9, 10,13]:
-            response = client4.chat.completions.create(
+            response_ = client4.chat.completions.create(
                 model=models_dict[model_number], messages=conversation,
                  temperature=temp,  # Set temperature to 0.7
-                top_p=top_p)
+                top_p=top_p,
+                stream=True)
+            # response=""
+            return st.write_stream(stream_data_(response_)) 
+            
+
         elif model_number in [11,12,14]:
-            response = client5.chat.completions.create(
+            response_ = client5.chat.completions.create(
                 model=models_dict[model_number], messages=conversation,
                  temperature=temp,  # Set temperature to 0.7
-                top_p=top_p)
+                top_p=top_p,
+                stream=True)
+            return st.write_stream(stream_data_(response_)) 
             # return response.text
 
         else:

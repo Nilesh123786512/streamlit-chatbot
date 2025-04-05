@@ -192,10 +192,12 @@ if st.session_state.authenticated:
                 st.session_state.think = False
 
             # Query the model
-            ass_message_place = st.empty()
-            with ass_message_place.container():
+            bot_message=st.chat_message("assistant")
+            # ass_message_place = st.empty()
+            # with ass_message_place.container():
 
                 # Define the CSS for the blinking effect
+            if not model_number in [9,10,13,11,12,14]:
                 blink_css = """
                 <style>
                 @keyframes blink {
@@ -210,12 +212,12 @@ if st.session_state.authenticated:
                 """
 
                 # Apply the CSS
-                st.markdown(blink_css, unsafe_allow_html=True)
+                # bot_message.markdown(blink_css, unsafe_allow_html=True)
 
                 # Display blinking text
                 # st.markdown('<p class="blink">This text will blink</p>', unsafe_allow_html=True)
 
-                st.markdown('<p class="blink">Thinking</p>',
+                bot_message.markdown(blink_css+'<p class="blink">Thinking</p>',
                             unsafe_allow_html=True)
             # print(search)
             # print("all ready to send to AI")
