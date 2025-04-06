@@ -200,7 +200,7 @@ if st.session_state.authenticated:
             # with ass_message_place.container():
 
                 # Define the CSS for the blinking effect
-            if not model_number in [9,10,13,11,12,14]:
+            if not model_number in [9,10,13,11,12,14,15]:
                 bot_message=st.chat_message("assistant")
                 blink_css = """
                 <style>
