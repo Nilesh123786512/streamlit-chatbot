@@ -3,7 +3,7 @@ from utils import query_openai, models_dict
 import streamlit as st
 import re
 import time
-from utils import generate_audio_total, play_audio
+from utils import generate_audio_total, play_audio,replacer
 
 models_dict_reversed = {value: key for key, value in models_dict.items()}
 
@@ -118,8 +118,10 @@ if st.session_state.authenticated:
                 # print(main_content)
         # main_content = re.sub(r"\\\[\s(.*?)\s\\\]", "$$\1$$", main_content)
                 # main_content = re.sub(r"\\\[\s*", "$$", main_content)
-                main_content = re.sub(r"\\\(\s*", "$", main_content)
-                main_content = re.sub(r"\s*\\\)", "$", main_content)
+                # main_content = re.sub(r"\\\(\s*", "$", main_content)
+                # main_content = re.sub(r"\s*\\\)", "$", main_content)
+                pattern_of_re = r"(```.*?```)|(\\\(\s*)|(\s*\\\))"
+                main_content=re.sub(pattern_of_re, replacer, main_content, flags=re.DOTALL)
                 bot_message= st.chat_message("assistant")
                 # main_content = re.sub(r"\s*\\\]", "$$", main_content)
                 latex_blocks = re.findall(r"\\\[(.*?)\\\]", main_content, re.DOTALL)

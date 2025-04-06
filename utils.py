@@ -13,6 +13,27 @@ import re
 import streamlit as st
 from duckduckgo_search import DDGS
 import httpx
+
+def replacer(match):
+        # Check which group matched
+    code_block = match.group(1)
+    open_math = match.group(2)
+    close_math = match.group(3)
+
+    if code_block:
+        # If it's a code block (group 1), return it unchanged
+        return code_block
+    elif open_math:
+        # If it's the opening math delimiter (group 2), replace it with $
+        return "$"
+    elif close_math:
+        # If it's the closing math delimiter (group 3), replace it with $
+        return "$"
+    else:
+        # This case should not be reached with the given pattern,
+        # but it's good practice to handle it.
+        return match.group(0) # Return the original match if unsure
+
 # import streamlit.components.v1 as components
 # client5 = genai.Client(api_key=st.secrets['google'])
 
