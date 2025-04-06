@@ -194,12 +194,12 @@ if st.session_state.authenticated:
                 st.session_state.think = False
 
             # Query the model
-            bot_message=st.chat_message("assistant")
             # ass_message_place = st.empty()
             # with ass_message_place.container():
 
                 # Define the CSS for the blinking effect
             if not model_number in [9,10,13,11,12,14]:
+                bot_message=st.chat_message("assistant")
                 blink_css = """
                 <style>
                 @keyframes blink {

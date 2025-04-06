@@ -2,6 +2,7 @@ import wave
 import miniaudio
 import contextlib
 import os
+import streamlit as st
 from openai import OpenAI
 import requests
 import base64
@@ -12,7 +13,7 @@ import re
 import streamlit as st
 from duckduckgo_search import DDGS
 import httpx
-import streamlit.components.v1 as components
+# import streamlit.components.v1 as components
 # client5 = genai.Client(api_key=st.secrets['google'])
 
 models_dict = {
@@ -92,6 +93,9 @@ async def search_tavily(query):
 def stream_data_(stream):
     resp=""
     for chunk in stream:
+        _cont=chunk.choices[0].delta.content
+        if _cont is None:
+            continue
         yield chunk.choices[0].delta.content
         resp+=chunk.choices[0].delta.content
     return resp
@@ -129,22 +133,26 @@ async def query_openai(conversation,
                 top_p=top_p)
             # print(f"Response is {response.choices[0].message.content}")
         elif model_number in [9, 10,13]:
-            response_ = client4.chat.completions.create(
-                model=models_dict[model_number], messages=conversation,
-                 temperature=temp,  # Set temperature to 0.7
-                top_p=top_p,
-                stream=True)
+            with st.spinner(text="Thinking..."):
+                response_ = client4.chat.completions.create(
+                    model=models_dict[model_number], messages=conversation,
+                    temperature=temp,  # Set temperature to 0.7
+                    top_p=top_p,
+                    stream=True)
             # response=""
-            return st.write_stream(stream_data_(response_)) 
+            with st.chat_message("assistant"):
+                return st.write_stream(stream_data_(response_)) 
             
 
         elif model_number in [11,12,14]:
-            response_ = client5.chat.completions.create(
-                model=models_dict[model_number], messages=conversation,
-                 temperature=temp,  # Set temperature to 0.7
-                top_p=top_p,
-                stream=True)
-            return st.write_stream(stream_data_(response_)) 
+            with st.spinner(text="Thinking...."):
+                response_ = client5.chat.completions.create(
+                    model=models_dict[model_number], messages=conversation,
+                    temperature=temp,  # Set temperature to 0.7
+                    top_p=top_p,
+                    stream=True)
+            with st.chat_message("assistant"):
+                return st.write_stream(stream_data_(response_)) 
             # return response.text
 
         else:
