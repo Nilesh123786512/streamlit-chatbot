@@ -226,7 +226,7 @@ if st.session_state.authenticated:
             # print(search)
             # print("all ready to send to AI")
             print(f'Searching is kept : {search}')
-            if model_number in [9,13,11,10,14]:
+            if model_number in [9,13,11,10,14,12,15]:
                 response =asyncio.run(query_openai(st.session_state.conversation,
                                         model_number,
                                         search=search,
