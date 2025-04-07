@@ -38,13 +38,14 @@ def replacer(match):
 # client5 = genai.Client(api_key=st.secrets['google'])
 
 models_dict = {
-    0: "qwen-qwq-32b",
-    13: "deepseek/deepseek-chat-v3-0324:free",
     15: "meta-llama/llama-4-maverick:free",
+    13: "deepseek/deepseek-chat-v3-0324:free",
+    9: "deepseek/deepseek-chat:free",
+    16: "google/gemini-2.5-pro-exp-03-25:free",
+    14: "gemini-2.5-pro-exp-03-25",
+    0: "qwen-qwq-32b",
     3: "deepseek-r1-distill-qwen-32b",
     4: "deepseek-r1-distill-llama-70b",
-    14: "gemini-2.5-pro-exp-03-25",
-    9: "deepseek/deepseek-chat:free",
     10: "deepseek/deepseek-r1:free",
     1: "qwen-2.5-32b",
     2: "qwen-2.5-coder-32b",
@@ -154,7 +155,7 @@ async def query_openai(conversation,
                 temperature=temp,  # Set temperature to 0.7
                 top_p=top_p)
             # print(f"Response is {response.choices[0].message.content}")
-        elif model_number in [9, 10,13,15]:
+        elif model_number in [9, 10,13,15,16]:
             with st.spinner(text="Thinking..."):
                 response_ = client4.chat.completions.create(
                     model=models_dict[model_number], messages=conversation,

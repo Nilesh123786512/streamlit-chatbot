@@ -13,6 +13,7 @@ st.set_page_config(
     layout="wide",
     initial_sidebar_state="expanded",
 )
+long_context_models=[9,10,13,11,12,14,15,16]
 
 if "authenticated" not in st.session_state:
     st.session_state.authenticated = False
@@ -200,7 +201,7 @@ if st.session_state.authenticated:
             # with ass_message_place.container():
 
                 # Define the CSS for the blinking effect
-            if not model_number in [9,10,13,11,12,14,15]:
+            if not model_number in long_context_models:
                 bot_message=st.chat_message("assistant")
                 blink_css = """
                 <style>
@@ -226,7 +227,7 @@ if st.session_state.authenticated:
             # print(search)
             # print("all ready to send to AI")
             print(f'Searching is kept : {search}')
-            if model_number in [9,13,11,10,14,12,15]:
+            if model_number in long_context_models:
                 response =asyncio.run(query_openai(st.session_state.conversation,
                                         model_number,
                                         search=search,
