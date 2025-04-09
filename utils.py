@@ -42,6 +42,7 @@ models_dict = {
     13: "deepseek/deepseek-chat-v3-0324:free",
     9: "deepseek/deepseek-chat:free",
     16: "google/gemini-2.5-pro-exp-03-25:free",
+    1: "gemini-2.0-flash-thinking-exp-1219",
     14: "gemini-2.5-pro-exp-03-25",
     0: "qwen-qwq-32b",
     4: "deepseek-r1-distill-llama-70b",
@@ -164,7 +165,7 @@ async def query_openai(conversation,
                 return st.write_stream(stream_data_(response_)) 
             
 
-        elif model_number in [11,12,14]:
+        elif model_number in [1,11,12,14]:
             with st.spinner(text="Thinking...."):
                 response_ = client5.chat.completions.create(
                     model=models_dict[model_number], messages=conversation,
