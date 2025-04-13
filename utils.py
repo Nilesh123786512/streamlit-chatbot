@@ -154,7 +154,7 @@ async def query_openai(conversation,
                 temperature=temp,  # Set temperature to 0.7
                 top_p=top_p)
             # print(f"Response is {response.choices[0].message.content}")
-        elif model_number in [9, 10,13,15,16]:
+        elif model_number in [2,9, 10,13,15,16]:
             with st.spinner(text="Thinking..."):
                 response_ = client4.chat.completions.create(
                     model=models_dict[model_number], messages=conversation,
