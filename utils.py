@@ -38,12 +38,13 @@ def replacer(match):
 # client5 = genai.Client(api_key=st.secrets['google'])
 
 models_dict = {
-    15: "meta-llama/llama-4-maverick:free",
     13: "deepseek/deepseek-chat-v3-0324:free",
+    15: "meta-llama/llama-4-maverick:free",
     9: "deepseek/deepseek-chat:free",
+    2: "nvidia/llama-3.1-nemotron-ultra-253b-v1:free",
     16: "google/gemini-2.5-pro-exp-03-25:free",
-    1: "gemini-2.0-flash-thinking-exp-1219",
     14: "gemini-2.5-pro-exp-03-25",
+    1: "gemini-2.0-flash-thinking-exp-1219",
     0: "qwen-qwq-32b",
     4: "deepseek-r1-distill-llama-70b",
     10: "deepseek/deepseek-r1:free",
