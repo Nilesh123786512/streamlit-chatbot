@@ -13,7 +13,7 @@ st.set_page_config(
     layout="wide",
     initial_sidebar_state="expanded",
 )
-long_context_models=[1,2,9,10,13,11,12,14,15,16]
+long_context_models=[1,2,9,10,13,11,14,15,16]
 
 if "authenticated" not in st.session_state:
     st.session_state.authenticated = False

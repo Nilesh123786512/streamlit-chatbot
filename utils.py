@@ -41,6 +41,8 @@ models_dict = {
     13: "deepseek/deepseek-chat-v3-0324:free",
     15: "meta-llama/llama-4-maverick:free",
     9: "deepseek/deepseek-chat:free",
+    12: "openai/gpt-4.1-mini",
+    3: "openai/gpt-4.1",
     2: "nvidia/llama-3.1-nemotron-ultra-253b-v1:free",
     16: "google/gemini-2.5-pro-exp-03-25:free",
     14: "gemini-2.5-pro-exp-03-25",
@@ -53,8 +55,6 @@ models_dict = {
     5: "deepseek-r1",
     6: "deepseek-v3",
     11: "gemini-2.0-flash",
-    12: "gemini-2.0-pro-exp-02-05",
-    
 }
 
 ## Declaring the clients for different purposes
@@ -66,9 +66,8 @@ client2 = OpenAI(
     api_key=st.secrets["groq_api"])
 
 client3 = OpenAI(
-    base_url="https://api.groq.com/openai/v1",
-    # base_url="https://api.sree.shop/v1",
-    api_key=st.secrets["groq_api2"])
+    base_url="https://models.github.ai/inference",
+    api_key=st.secrets["github"])
 client4 = OpenAI(
     base_url="https://openrouter.ai/api/v1",
     api_key=st.secrets["open_router"])
@@ -96,7 +95,7 @@ async def search_tavily(query):
 
         print(f"Changed query:{query}")
         # query_filtered.choices[0].message.content
-        query_filtered = client3.chat.completions.create(
+        query_filtered = client2.chat.completions.create(
             model="llama3-70b-8192", messages=query)
         query_filtered = re.search(r'''<search>(.*?)</search>''',  query_filtered.choices[0].message.content,
                                    re.DOTALL)
@@ -166,7 +165,7 @@ async def query_openai(conversation,
                 return st.write_stream(stream_data_(response_)) 
             
 
-        elif model_number in [1,11,12,14]:
+        elif model_number in [1,11,14]:
             with st.spinner(text="Thinking...."):
                 response_ = client5.chat.completions.create(
                     model=models_dict[model_number], messages=conversation,
@@ -176,7 +175,17 @@ async def query_openai(conversation,
             with st.chat_message("assistant"):
                 return st.write_stream(stream_data_(response_)) 
             # return response.text
-
+        elif model_number in [3,12]:
+            conv=conversation.copy()
+            conv=[c for c in conv if c['role'] in ['user','system']]
+            response_ = client3.chat.completions.create(
+                model=models_dict[model_number], messages=conv,
+                temperature=temp, 
+                top_p=top_p,
+                stream=False)
+            print(response_)
+            return response_.choices[0].message.content.strip()
+            
         else:
             response = client2.chat.completions.create(
                 model=models_dict[model_number], messages=conversation,
