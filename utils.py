@@ -42,11 +42,12 @@ models_dict = {
     15: "meta-llama/llama-4-maverick:free",
     9: "deepseek/deepseek-chat:free",
     12: "openai/gpt-4.1-mini",
+    17: "gemini-2.5-flash-preview-04-17",
+    14: "gemini-2.5-pro-exp-03-25",
+    1: "gemini-2.0-flash-thinking-exp-1219",
     3: "openai/gpt-4.1",
     2: "nvidia/llama-3.1-nemotron-ultra-253b-v1:free",
     16: "google/gemini-2.5-pro-exp-03-25:free",
-    14: "gemini-2.5-pro-exp-03-25",
-    1: "gemini-2.0-flash-thinking-exp-1219",
     0: "qwen-qwq-32b",
     4: "deepseek-r1-distill-llama-70b",
     10: "deepseek/deepseek-r1:free",
@@ -96,7 +97,7 @@ async def search_tavily(query):
         print(f"Changed query:{query}")
         # query_filtered.choices[0].message.content
         query_filtered = client2.chat.completions.create(
-            model="llama3-70b-8192", messages=query)
+            model="deepseek-r1-distill-llama-70b", messages=query)
         query_filtered = re.search(r'''<search>(.*?)</search>''',  query_filtered.choices[0].message.content,
                                    re.DOTALL)
         print("Fetching query:",query_filtered.group(1))
@@ -165,7 +166,7 @@ async def query_openai(conversation,
                 return st.write_stream(stream_data_(response_)) 
             
 
-        elif model_number in [1,11,14]:
+        elif model_number in [1,11,14,17]:
             with st.spinner(text="Thinking...."):
                 response_ = client5.chat.completions.create(
                     model=models_dict[model_number], messages=conversation,
