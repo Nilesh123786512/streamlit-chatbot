@@ -167,9 +167,19 @@ async def query_openai(conversation,
             
 
         elif model_number in [1,11,14,17]:
+            conv=conversation.copy()
+            conv.append({
+            "role":
+            "system",
+            "content":
+            """
+            Instructions for output:
+            1)Give the maths expressions(if exists) in perfect latex that is rendered perfectly in markdown.Don't give latex as seperate code block.Don't say that i am giving in latex rendering to user.
+"""
+        })
             with st.spinner(text="Thinking...."):
                 response_ = client5.chat.completions.create(
-                    model=models_dict[model_number], messages=conversation,
+                    model=models_dict[model_number], messages=conv,
                     temperature=temp,  # Set temperature to 0.7
                     top_p=top_p,
                     stream=True)

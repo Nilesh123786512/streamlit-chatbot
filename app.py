@@ -59,8 +59,6 @@ if st.session_state.authenticated:
         st.session_state.temp = st.slider("Temperature",0., 2.,0.6)
         st.session_state.top_p = st.slider("Top_p",0., 1.,0.95)
 
-
-
     hist_container = st.container()
     new_reply_container = st.container()
     main_container = st.container()
