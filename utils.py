@@ -114,12 +114,14 @@ async def search_tavily(query):
 
 def stream_data_(stream):
     resp=""
-    for chunk in stream:
-        _cont=chunk.choices[0].delta.content
+    for chunker in stream:
+        if len(chunker.choices) is 0:
+            continue
+        _cont=chunker.choices[0].delta.content
         if _cont is None:
             continue
-        yield chunk.choices[0].delta.content
-        resp+=chunk.choices[0].delta.content
+        yield _cont
+        resp+=_cont
     return resp
         
 # openai.api_key = "your_openai_api_key"  # Replace with your actual OpenAI API key
@@ -193,9 +195,11 @@ async def query_openai(conversation,
                 model=models_dict[model_number], messages=conv,
                 temperature=temp, 
                 top_p=top_p,
-                stream=False)
-            print(response_)
-            return response_.choices[0].message.content.strip()
+                stream=True)
+            with st.chat_message("assistant"):
+                return st.write_stream(stream_data_(response_)) 
+            # print(response_)
+            # return response_.choices[0].message.content.strip()
             
         else:
             response = client2.chat.completions.create(
