@@ -38,10 +38,11 @@ def replacer(match):
 # client5 = genai.Client(api_key=st.secrets['google'])
 
 models_dict = {
+    12: "openai/gpt-4.1-mini",
+    11: "gemini-2.0-flash",
     13: "deepseek/deepseek-chat-v3-0324:free",
     15: "meta-llama/llama-4-maverick:free",
     9: "deepseek/deepseek-chat:free",
-    12: "openai/gpt-4.1-mini",
     17: "gemini-2.5-flash-preview-04-17",
     14: "gemini-2.5-pro-exp-03-25",
     1: "gemini-2.0-flash-thinking-exp-1219",
@@ -55,7 +56,6 @@ models_dict = {
     7: "claude-3-5-sonnet-20240620",
     5: "deepseek-r1",
     6: "deepseek-v3",
-    11: "gemini-2.0-flash",
 }
 
 ## Declaring the clients for different purposes
@@ -86,28 +86,32 @@ async def search_tavily(query):
     ddgs = DDGS()
     # print(f'Got query {query}')
     try:
-        query = query.copy()
-        query.append({
-            "role":
-            "system",
-            "content":
-            "Based on all above queries give me a single search query enclosed in <search>content to search</search>.If the query was straight forward then don't modify just enclose it else from context give the best query.Also highlight the keywords that needs to be searched by **keyword**"
-        })
+        with st.spinner("Formatting the query"):
+            query = query.copy()
+            query.append({
+                "role":
+                "system",
+                "content":
+                "Based on all above queries give me a single search query enclosed in <search>content to search</search>.If the query was straight forward then don't modify just enclose it else from context give the best query.Also highlight the keywords that needs to be searched by **keyword**"
+            })
 
-        print(f"Changed query:{query}")
-        # query_filtered.choices[0].message.content
-        query_filtered = client2.chat.completions.create(
-            model="deepseek-r1-distill-llama-70b", messages=query)
-        query_filtered = re.search(r'''<search>(.*?)</search>''',  query_filtered.choices[0].message.content,
-                                   re.DOTALL)
-        print("Fetching query:",query_filtered.group(1))
-        # response = tavily_client.search(query_filtered.group(1))
-        results = ddgs.text(query_filtered.group(1), max_results=5)
-        res=""
-        for i,r in enumerate(results):
-            res+=f'[search{i+1}]({r["href"]}):\n{r["body"]}\n'
-        print(res)
-        return res
+            # print(f"Changed query:{query}")
+            # query_filtered.choices[0].message.content
+            query_filtered = client2.chat.completions.create(
+                model="deepseek-r1-distill-llama-70b", messages=query)
+            query_filtered=re.sub(r'(<think>*</think>)','',query_filtered.choices[0].message.content,flags=re.DOTALL)
+            query_filtered = re.search(r'''<search>(.*?)</search>''',  query_filtered,
+                                    re.DOTALL)
+            # print(query_filtered)
+            # print("Fetching query:",query_filtered.group(1))
+            # response = tavily_client.search(query_filtered.group(1))
+        with st.spinner("Searching the web"):
+            results = ddgs.text(query_filtered.group(1), max_results=5)
+            res=""
+            for i,r in enumerate(results):
+                res+=f'[search{i+1}]({r["href"]}):\n{r["body"]}\n'
+            print(res)
+            return res
     except Exception as e:
         print(f'Exception is {e}')
         return "Unable to fetch search results"
@@ -115,7 +119,7 @@ async def search_tavily(query):
 def stream_data_(stream):
     resp=""
     for chunker in stream:
-        if len(chunker.choices) is 0:
+        if len(chunker.choices) == 0:
             continue
         _cont=chunker.choices[0].delta.content
         if _cont is None:
@@ -190,7 +194,7 @@ async def query_openai(conversation,
             # return response.text
         elif model_number in [3,12]:
             conv=conversation.copy()
-            conv=[c for c in conv if c['role'] in ['user','system']]
+            # conv=[c for c in conv if c['role'] in ['user','system']]
             response_ = client3.chat.completions.create(
                 model=models_dict[model_number], messages=conv,
                 temperature=temp, 
