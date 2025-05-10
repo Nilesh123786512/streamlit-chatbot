@@ -367,9 +367,22 @@ async def generate_audio_total(text, output_filename="output.wav"):
     else:
         split_parts = split_text(text)
         temp_wav_files = []
-    
-        for i, text_part in enumerate(split_parts):
-            audio_data = await generate_audio(text_part)  # Get audio content
+        # Create a list of coroutines for each text part
+        audio_coroutines = [generate_audio(text_part) for text_part in split_parts]
+
+        # Run all coroutines concurrently using asyncio.gather
+        # audio_results will be a list containing the audio_data from each call,
+        # in the same order as the split_parts
+        print(f"Generating audio for {len(split_parts)} parts concurrently...")
+        audio_results = await asyncio.gather(*audio_coroutines)
+        print("All audio parts generated.")
+
+        temp_wav_files = []
+
+        # Now process the results sequentially (decoding and saving to WAV)
+        # This part is synchronous and doesn't need to be concurrent unless it's a bottleneck
+        print("Processing and converting audio parts to WAV...")
+        for i, audio_data in enumerate(audio_results):
             mp3_filename = f"temp_part_{i}.mp3"
             with open(mp3_filename, "wb") as mp3_fp:
                 mp3_fp.write(audio_data)
