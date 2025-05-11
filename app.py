@@ -94,7 +94,6 @@ if st.session_state.authenticated:
         for chat in st.session_state.conversation:
             if chat["role"] == "user":
                 user_msg = st.chat_message("user",avatar=user_icon_url)
-                # st.markdown("### You")
                 user_msg.text(f"{chat['content']}")
             elif chat["role"] == "assistant":
                 _ind+=1
@@ -104,7 +103,6 @@ if st.session_state.authenticated:
                                     '',
                                     chat['content'],
                                     flags=re.DOTALL)
-                # st.markdown("### Bot")
                 if thoughts_match:
                     thoughts = thoughts_match.group(1)
                     thoughts = re.sub(r"\\\[\s*", "$$", thoughts)
@@ -113,9 +111,6 @@ if st.session_state.authenticated:
                     thoughts = re.sub(r"\s*\\\)", "$", thoughts)
                     with st.expander("Thoughts"):
                         st.write(thoughts)
-                # print(main_content)
-                # print(main_content)
-        # main_content = re.sub(r"\\\[\s(.*?)\s\\\]", "$$\1$$", main_content)
                 # main_content = re.sub(r"\\\[\s*", "$$", main_content)
                 # main_content = re.sub(r"\\\(\s*", "$", main_content)
                 # main_content = re.sub(r"\s*\\\)", "$", main_content)
@@ -140,15 +135,14 @@ if st.session_state.authenticated:
                         str=" ".join(split_text)
                         fil_audio_name=asyncio.run(generate_audio_total(str))
                         with col2:
-                            # play_audio("output.wav",col2)
                             play_audio(fil_audio_name,col2)
                     # Add regenerate button
                 with colrerun:
                     model_number = models_dict_reversed.get(model)
                     if st.button("🔄", key=f"regenerate_{_ind}", help="Regenerate this response"):
-                        # last_user_msg = next((msg for msg in reversed(st.session_state.conversation) if msg["role"] == "user"), None)
-                        # if last_user_msg:
-                        if model_number in [9,13,11,10,14]:
+                        #removing the last  bot message
+                        st.session_state.conversation.pop()
+                        if model_number in long_context_models:
                             response = asyncio.run(query_openai(
                                 st.session_state.conversation,
                                 model_number,
@@ -156,7 +150,11 @@ if st.session_state.authenticated:
                                 temp=st.session_state.temp,
                                 top_p=st.session_state.top_p
                             ))
-                            st.session_state.conversation[-1]["content"] = response
+                            # Adding the new response to the conversation
+                            st.session_state.conversation.append({
+                                "role": "assistant",
+                                "content": response
+                            })
                             st.rerun()
                         else:
                             response = asyncio.run(query_openai(
@@ -166,7 +164,11 @@ if st.session_state.authenticated:
                                 temp=st.session_state.temp,
                                 top_p=st.session_state.top_p
                             ))
-                            st.session_state.conversation[-1]["content"] = response
+                            # Adding the new response to the conversation
+                            st.session_state.conversation.append({
+                                "role": "assistant",
+                                "content": response
+                            })
                             st.rerun()
 
 
