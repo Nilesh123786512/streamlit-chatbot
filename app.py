@@ -6,7 +6,7 @@ import time
 from utils import generate_audio_total, play_audio,replacer
 models_dict_reversed = {value: key for key, value in models_dict.items()}
 from utils import user_icon_url, bot_icon_url
-
+# print(st.session_state.icon_numbers)
 st.set_page_config(
     page_title="My Chatbot",
     # page_icon="",
@@ -47,13 +47,15 @@ if st.session_state.authenticated:
     if "conversation" not in st.session_state:
         st.session_state.conversation = [{
             "role": "system",
-            "content": "You are a helpful and concise assistant. Your primary goal is to directly address the user's most recent question or statement.  Use the preceding conversation history to understand the context and provide relevant background, but always ensure your response is primarily focused on and answers the *latest user input*.  If there are any ambiguities or contradictions between past messages and the latest message, assume the latest message is the most accurate representation of the user's current intent.f you retrieve search results while responding, please provide links that you got as it is,don't hallucinate links"
+            "content": "You are a helpful and concise assistant. Your primary goal is to directly address the user's most recent question or statement.  Use the preceding conversation history to understand the context and provide relevant background, but always ensure your response is primarily focused on and answers the *latest user input*.  If there are any ambiguities or contradictions between past messages and the latest message, assume the latest message is the most accurate representation of the user's current intent.if you retrieve search results while responding, please provide links that you got as it is,don't hallucinate links"
         }]
     if "input" not in st.session_state:
         st.session_state.input = [{
             "role": "system",
-            "content": "You are a helpful and concise assistant. Your primary goal is to directly address the user's most recent question or statement.  Use the preceding conversation history to understand the context and provide relevant background, but always ensure your response is primarily focused on and answers the *latest user input*.  If there are any ambiguities or contradictions between past messages and the latest message, assume the latest message is the most accurate representation of the user's current intent.f you retrieve search results while responding, please provide links that you got as it is,don't hallucinate links"
+            "content": "You are a helpful and concise assistant. Your primary goal is to directly address the user's most recent question or statement.  Use the preceding conversation history to understand the context and provide relevant background, but always ensure your response is primarily focused on and answers the *latest user input*.  If there are any ambiguities or contradictions between past messages and the latest message, assume the latest message is the most accurate representation of the user's current intent.if you retrieve search results while responding, please provide links that you got as it is,don't hallucinate links"
         }]
+    if "icon_numbers" not in st.session_state:
+        st.session_state.icon_numbers = []
 
     with st.sidebar:
         st.session_state.temp = st.slider("Temperature",0., 2.,0.6)
@@ -84,6 +86,7 @@ if st.session_state.authenticated:
                     "role": "system",
                     "content": "You are a helpful assistant."
                 }]
+                st.session_state.icon_numbers = []
                 st.rerun()
         with col1:
             search = st.toggle("Search")
@@ -116,10 +119,11 @@ if st.session_state.authenticated:
                 # main_content = re.sub(r"\s*\\\)", "$", main_content)
                 pattern_of_re = r"(```.*?```)|(\\\(\s*)|(\s*\\\))"
                 main_content=re.sub(pattern_of_re, replacer, main_content, flags=re.DOTALL)
-                bot_message= st.chat_message("assistant",avatar=bot_icon_url)
+                # Bot icons are stored according to index of assistant messages and using them now
+                ic_url=bot_icon_url[st.session_state.icon_numbers[_ind-1]]
+                bot_message= st.chat_message("assistant",avatar=ic_url)
                 # main_content = re.sub(r"\s*\\\]", "$$", main_content)
                 latex_blocks = re.findall(r"\\\[(.*?)\\\]", main_content, re.DOTALL)
-
                 # Split text around LaTeX expressions
                 split_text = re.split(r"\\\[(.*?)\\\]", main_content, flags=re.DOTALL)
                 split_text=[_tex for _tex in split_text if _tex not in latex_blocks]
@@ -142,6 +146,7 @@ if st.session_state.authenticated:
                     if st.button("🔄", key=f"regenerate_{_ind}", help="Regenerate this response"):
                         #removing the last  bot message
                         st.session_state.conversation.pop()
+                        st.session_state.icon_numbers.pop()
                         if model_number in long_context_models:
                             response = asyncio.run(query_openai(
                                 st.session_state.conversation,
@@ -202,7 +207,7 @@ if st.session_state.authenticated:
 
                 # Define the CSS for the blinking effect
             if not model_number in long_context_models:
-                bot_message=st.chat_message("assistant",avatar=bot_icon_url)
+                bot_message=st.chat_message("assistant",avatar=bot_icon_url[3])
                 blink_css = """
                 <style>
                 @keyframes blink {

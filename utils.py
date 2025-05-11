@@ -6,14 +6,13 @@ import streamlit as st
 from openai import OpenAI
 import requests
 import base64
-from concurrent.futures import ThreadPoolExecutor
 import io
 import asyncio
 import re
 import streamlit as st
 from duckduckgo_search import DDGS
 import httpx
-bot_icon_url="data:image/png;base64,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"
+bot_icon_url=["icons/gemini.png","icons/chatgpt.png","icons/deepseek.png",None]#"icons/default.png"]
 user_icon_url="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRGWm7kgMH1PEsycRwkyqPcPB1b2NITpD8j2g&s"
 
 def replacer(match):
@@ -50,7 +49,6 @@ models_dict = {
     1: "gemini-2.0-flash-thinking-exp-1219",
     3: "openai/gpt-4.1",
     2: "nvidia/llama-3.1-nemotron-ultra-253b-v1:free",
-    16: "google/gemini-2.5-pro-exp-03-25:free",
     0: "qwen-qwq-32b",
     4: "deepseek-r1-distill-llama-70b",
     10: "deepseek/deepseek-r1:free",
@@ -162,6 +160,12 @@ async def query_openai(conversation,
         })
     try:
         if model_number in [5, 6, 7, 8]:
+            if model_number in [5,6]:
+                st.session_state.icon_numbers.append(2)
+            elif model_number in [7]:
+                st.session_state.icon_numbers.append(1)
+            else:
+                st.session_state.icon_numbers.append(3)
             print(f"Conversation :{conversation}")
             response = client1.chat.completions.create(
                 model=models_dict[model_number],
@@ -170,7 +174,13 @@ async def query_openai(conversation,
                 temperature=temp,  # Set temperature to 0.7
                 top_p=top_p)
             # print(f"Response is {response.choices[0].message.content}")
-        elif model_number in [2,9, 10,13,15,16]:
+        elif model_number in [2,9, 10,13,15]:
+            if model_number in [9,10,13]:
+                ic_url=bot_icon_url[2]
+                st.session_state.icon_numbers.append(2)
+            else:
+                ic_url=bot_icon_url[3]
+                st.session_state.icon_numbers.append(3)
             with st.spinner(text="Thinking..."):
                 response_ = client4.chat.completions.create(
                     model=models_dict[model_number], messages=conversation,
@@ -178,7 +188,7 @@ async def query_openai(conversation,
                     top_p=top_p,
                     stream=True)
             # response=""
-            with st.chat_message("assistant",avatar=bot_icon_url):
+            with st.chat_message("assistant",avatar=ic_url):
                 return st.write_stream(stream_data_(response_)) 
             
 
@@ -194,28 +204,33 @@ async def query_openai(conversation,
 """
         })
             with st.spinner(text="Thinking...."):
+                st.session_state.icon_numbers.append(0)
                 response_ = client5.chat.completions.create(
                     model=models_dict[model_number], messages=conv,
                     temperature=temp,  # Set temperature to 0.7
                     top_p=top_p,
                     stream=True)
-            with st.chat_message("assistant",avatar=bot_icon_url):
+            with st.chat_message("assistant",avatar=bot_icon_url[0]):
                 return st.write_stream(stream_data_(response_)) 
             # return response.text
         elif model_number in [3,12]:
             conv=conversation.copy()
             # conv=[c for c in conv if c['role'] in ['user','system']]
+            st.session_state.icon_numbers.append(1)
             response_ = client3.chat.completions.create(
                 model=models_dict[model_number], messages=conv,
                 temperature=temp, 
                 top_p=top_p,
                 stream=True)
-            with st.chat_message("assistant",avatar=bot_icon_url):
+            with st.chat_message("assistant",avatar=bot_icon_url[1]):
                 return st.write_stream(stream_data_(response_)) 
             # print(response_)
             # return response_.choices[0].message.content.strip()
             
         else:
+            st.session_state.icon_numbers.append(3)
+            if model_number == 4:
+                st.session_state.icon_numbers[-1]=2
             response = client2.chat.completions.create(
                 model=models_dict[model_number], messages=conversation,
                  temperature=temp,  # Set temperature to 0.7
