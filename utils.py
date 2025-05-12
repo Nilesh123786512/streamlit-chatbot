@@ -4,7 +4,6 @@ import contextlib
 import os
 import streamlit as st
 from openai import OpenAI
-import requests
 import base64
 import io
 import asyncio
@@ -12,8 +11,7 @@ import re
 import streamlit as st
 from duckduckgo_search import DDGS
 import httpx
-bot_icon_url=["icons/gemini.png","icons/chatgpt.png","icons/deepseek.png",None]#"icons/default.png"]
-user_icon_url="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRGWm7kgMH1PEsycRwkyqPcPB1b2NITpD8j2g&s"
+from models_data import models_dict,get_icon_no_and_value
 
 def replacer(match):
         # Check which group matched
@@ -35,28 +33,8 @@ def replacer(match):
         # but it's good practice to handle it.
         return match.group(0) # Return the original match if unsure
 
-# import streamlit.components.v1 as components
-# client5 = genai.Client(api_key=st.secrets['google'])
 
-models_dict = {
-    12: "openai/gpt-4.1-mini",
-    11: "gemini-2.0-flash",
-    13: "deepseek/deepseek-chat-v3-0324:free",
-    15: "meta-llama/llama-4-maverick:free",
-    9: "deepseek/deepseek-chat:free",
-    17: "gemini-2.5-flash-preview-04-17",
-    14: "gemini-2.5-pro-exp-03-25",
-    1: "gemini-2.0-flash-thinking-exp-1219",
-    3: "openai/gpt-4.1",
-    2: "nvidia/llama-3.1-nemotron-ultra-253b-v1:free",
-    0: "qwen-qwq-32b",
-    4: "deepseek-r1-distill-llama-70b",
-    10: "deepseek/deepseek-r1:free",
-    8: "gpt-4o-2024-05-13",
-    7: "claude-3-5-sonnet-20240620",
-    5: "deepseek-r1",
-    6: "deepseek-v3",
-}
+
 
 ## Declaring the clients for different purposes
 client1 = OpenAI(
@@ -75,9 +53,6 @@ client4 = OpenAI(
 client5 = OpenAI(
     base_url="https://generativelanguage.googleapis.com/v1beta",
     api_key=st.secrets['google'])
-
-
-# tavily_client = TavilyClient(api_key=st.secrets["tavily_1"])
 
 
 #Tavily search if asked
@@ -148,8 +123,6 @@ async def query_openai(conversation,
     print(f'File:Utils,Got search in utils :{search}')
     respo = None
     if search:
-        # print(conversation[-1]['content'])
-        # print(f'File:Utils,Got search in utils :{search}')
         respo = await search_tavily(conversation)
         print(f'response is provided by tavily {respo}')
         conversation.append({
@@ -159,13 +132,10 @@ async def query_openai(conversation,
             f"Additional context from recent search results: {respo}"
         })
     try:
+        #Where icn_no refers to the number in the list `bot_icon_url`
+        icn_no,icn_url=get_icon_no_and_value(model_number)
         if model_number in [5, 6, 7, 8]:
-            if model_number in [5,6]:
-                st.session_state.icon_numbers.append(2)
-            elif model_number in [7]:
-                st.session_state.icon_numbers.append(1)
-            else:
-                st.session_state.icon_numbers.append(3)
+            st.session_state.icon_numbers.append(icn_no)
             print(f"Conversation :{conversation}")
             response = client1.chat.completions.create(
                 model=models_dict[model_number],
@@ -175,12 +145,7 @@ async def query_openai(conversation,
                 top_p=top_p)
             # print(f"Response is {response.choices[0].message.content}")
         elif model_number in [2,9, 10,13,15]:
-            if model_number in [9,10,13]:
-                ic_url=bot_icon_url[2]
-                st.session_state.icon_numbers.append(2)
-            else:
-                ic_url=bot_icon_url[3]
-                st.session_state.icon_numbers.append(3)
+            st.session_state.icon_numbers.append(icn_no)
             with st.spinner(text="Thinking..."):
                 response_ = client4.chat.completions.create(
                     model=models_dict[model_number], messages=conversation,
@@ -188,7 +153,7 @@ async def query_openai(conversation,
                     top_p=top_p,
                     stream=True)
             # response=""
-            with st.chat_message("assistant",avatar=ic_url):
+            with st.chat_message("assistant",avatar=icn_url):
                 return st.write_stream(stream_data_(response_)) 
             
 
@@ -204,33 +169,31 @@ async def query_openai(conversation,
 """
         })
             with st.spinner(text="Thinking...."):
-                st.session_state.icon_numbers.append(0)
+                st.session_state.icon_numbers.append(icn_no)
                 response_ = client5.chat.completions.create(
                     model=models_dict[model_number], messages=conv,
                     temperature=temp,  # Set temperature to 0.7
                     top_p=top_p,
                     stream=True)
-            with st.chat_message("assistant",avatar=bot_icon_url[0]):
+            with st.chat_message("assistant",avatar=icn_url):
                 return st.write_stream(stream_data_(response_)) 
             # return response.text
         elif model_number in [3,12]:
             conv=conversation.copy()
             # conv=[c for c in conv if c['role'] in ['user','system']]
-            st.session_state.icon_numbers.append(1)
+            st.session_state.icon_numbers.append(icn_no)
             response_ = client3.chat.completions.create(
                 model=models_dict[model_number], messages=conv,
                 temperature=temp, 
                 top_p=top_p,
                 stream=True)
-            with st.chat_message("assistant",avatar=bot_icon_url[1]):
+            with st.chat_message("assistant",avatar=icn_url):
                 return st.write_stream(stream_data_(response_)) 
             # print(response_)
             # return response_.choices[0].message.content.strip()
             
         else:
-            st.session_state.icon_numbers.append(3)
-            if model_number == 4:
-                st.session_state.icon_numbers[-1]=2
+            st.session_state.icon_numbers.append(icn_no)
             response = client2.chat.completions.create(
                 model=models_dict[model_number], messages=conversation,
                  temperature=temp,  # Set temperature to 0.7

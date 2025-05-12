@@ -1,12 +1,13 @@
 import asyncio
-from utils import query_openai, models_dict
+from utils import query_openai
+from models_data import models_dict
 import streamlit as st
 import re
 import time
 from utils import generate_audio_total, play_audio,replacer
 models_dict_reversed = {value: key for key, value in models_dict.items()}
-from utils import user_icon_url, bot_icon_url
-# print(st.session_state.icon_numbers)
+from models_data import user_icon_url, bot_icon_url,get_icon_no_and_value
+
 st.set_page_config(
     page_title="My Chatbot",
     # page_icon="",
@@ -201,13 +202,10 @@ if st.session_state.authenticated:
             else:
                 st.session_state.think = False
 
-            # Query the model
-            # ass_message_place = st.empty()
-            # with ass_message_place.container():
 
                 # Define the CSS for the blinking effect
             if not model_number in long_context_models:
-                bot_message=st.chat_message("assistant",avatar=bot_icon_url[3])
+                bot_message=st.chat_message("assistant",avatar=get_icon_no_and_value(model_number)[1])
                 blink_css = """
                 <style>
                 @keyframes blink {
@@ -221,17 +219,13 @@ if st.session_state.authenticated:
                 </style>
                 """
 
-                # Apply the CSS
-                # bot_message.markdown(blink_css, unsafe_allow_html=True)
 
-                # Display blinking text
-                # st.markdown('<p class="blink">This text will blink</p>', unsafe_allow_html=True)
 
                 bot_message.markdown(blink_css+'<p class="blink">Thinking</p>',
                             unsafe_allow_html=True)
             # print(search)
             # print("all ready to send to AI")
-            print(f'Searching is kept : {search}')
+            # print(f'Searching is kept : {search}')
             if model_number in long_context_models:
                 response =asyncio.run(query_openai(st.session_state.conversation,
                                         model_number,
