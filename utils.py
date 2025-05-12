@@ -3,15 +3,13 @@ import miniaudio
 import contextlib
 import os
 import streamlit as st
-from openai import OpenAI
-import base64
-import io
 import asyncio
 import re
 import streamlit as st
 from duckduckgo_search import DDGS
 import httpx
 from models_data import models_dict,get_icon_no_and_value
+from providers import client_groq,google_model_numbers,get_client
 
 def replacer(match):
         # Check which group matched
@@ -35,24 +33,6 @@ def replacer(match):
 
 
 
-
-## Declaring the clients for different purposes
-client1 = OpenAI(
-    base_url="https://api.sree.shop/v1",
-    api_key=st.secrets["devsdocode"])
-client2 = OpenAI(
-    base_url="https://api.groq.com/openai/v1",
-    api_key=st.secrets["groq_api"])
-
-client3 = OpenAI(
-    base_url="https://models.github.ai/inference",
-    api_key=st.secrets["github"])
-client4 = OpenAI(
-    base_url="https://openrouter.ai/api/v1",
-    api_key=st.secrets["open_router"])
-client5 = OpenAI(
-    base_url="https://generativelanguage.googleapis.com/v1beta",
-    api_key=st.secrets['google'])
 
 
 #Tavily search if asked
@@ -79,7 +59,7 @@ async def search_tavily(query):
 
             print(f"Changed query:{query}")
             # query_filtered.choices[0].message.content
-            query_filtered = client2.chat.completions.create(
+            query_filtered = client_groq.chat.completions.create(
                 model="deepseek-r1-distill-llama-70b", messages=query)
             print("Query filtered is :\n",query_filtered.choices[0].message.content)
             query_filtered=re.sub(r'(<think>*</think>)','',query_filtered.choices[0].message.content,flags=re.DOTALL)
@@ -111,7 +91,6 @@ def stream_data_(stream):
         resp+=_cont
     return resp
         
-# openai.api_key = "your_openai_api_key"  # Replace with your actual OpenAI API key
 async def query_openai(conversation,
                        model_number=1,
                        search=False,
@@ -132,97 +111,38 @@ async def query_openai(conversation,
             f"Additional context from recent search results: {respo}"
         })
     try:
+        conv=conversation.copy()
+        if model_number in google_model_numbers:
+            conv.append({
+                "role":
+                "system",
+                "content":
+                """
+                Instructions for output:
+                1)Give the maths expressions(if exists) in perfect latex that is rendered perfectly in markdown.Don't give latex as seperate code block.Don't say that i am giving in latex rendering to user.
+    """
+            })
+        # Getting the correct client for given request
+        client,isStream=get_client(model_number)
         #Where icn_no refers to the number in the list `bot_icon_url`
         icn_no,icn_url=get_icon_no_and_value(model_number)
-        if model_number in [5, 6, 7, 8]:
-            st.session_state.icon_numbers.append(icn_no)
-            print(f"Conversation :{conversation}")
-            response = client1.chat.completions.create(
+        st.session_state.icon_numbers.append(icn_no)
+        with st.spinner(text="Thinking...."):
+            response_ = client.chat.completions.create(
                 model=models_dict[model_number],
-                stream=False,
-                messages=conversation,
-                temperature=temp,  # Set temperature to 0.7
+                stream=isStream,
+                messages=conv,
+                temperature=temp,  
                 top_p=top_p)
-            # print(f"Response is {response.choices[0].message.content}")
-        elif model_number in [2,9, 10,13,15]:
-            st.session_state.icon_numbers.append(icn_no)
-            with st.spinner(text="Thinking..."):
-                response_ = client4.chat.completions.create(
-                    model=models_dict[model_number], messages=conversation,
-                    temperature=temp,  # Set temperature to 0.7
-                    top_p=top_p,
-                    stream=True)
-            # response=""
+        if isStream:
             with st.chat_message("assistant",avatar=icn_url):
                 return st.write_stream(stream_data_(response_)) 
-            
-
-        elif model_number in [1,11,14,17]:
-            conv=conversation.copy()
-            conv.append({
-            "role":
-            "system",
-            "content":
-            """
-            Instructions for output:
-            1)Give the maths expressions(if exists) in perfect latex that is rendered perfectly in markdown.Don't give latex as seperate code block.Don't say that i am giving in latex rendering to user.
-"""
-        })
-            with st.spinner(text="Thinking...."):
-                st.session_state.icon_numbers.append(icn_no)
-                response_ = client5.chat.completions.create(
-                    model=models_dict[model_number], messages=conv,
-                    temperature=temp,  # Set temperature to 0.7
-                    top_p=top_p,
-                    stream=True)
-            with st.chat_message("assistant",avatar=icn_url):
-                return st.write_stream(stream_data_(response_)) 
-            # return response.text
-        elif model_number in [3,12]:
-            conv=conversation.copy()
-            # conv=[c for c in conv if c['role'] in ['user','system']]
-            st.session_state.icon_numbers.append(icn_no)
-            response_ = client3.chat.completions.create(
-                model=models_dict[model_number], messages=conv,
-                temperature=temp, 
-                top_p=top_p,
-                stream=True)
-            with st.chat_message("assistant",avatar=icn_url):
-                return st.write_stream(stream_data_(response_)) 
-            # print(response_)
-            # return response_.choices[0].message.content.strip()
-            
-        else:
-            st.session_state.icon_numbers.append(icn_no)
-            response = client2.chat.completions.create(
-                model=models_dict[model_number], messages=conversation,
-                 temperature=temp,  # Set temperature to 0.7
-                top_p=top_p)
-        return response.choices[0].message.content.strip()
+        return response_.choices[0].message.content.strip()
     except Exception as e:
-        return f"Error Occured: {e}"
-        # raise e
+        return f"Error occured :{e}"
 
 
-# async def generate_audio(text):
-#     # Replace this URL with your actual API endpoint
-#     api_url = "https://openfm.onrender.com/api/generate"
-#     text= {
-#     "input": text,
-#     "voice": "shimmer",
-#     "vibe": "null",
-#     "customPrompt": "Voice Affect:Fast, Mystical and dreamy\nTone: Soft and enchanting\nPacing: FastnEmotion: Whimsical and magical\nPronunciation: Smooth and ethereal\nPauses: Strategic pauses for effect"
-# }
-#     headers = {
-#     'Content-Type': 'application/json'
-# }
-#     response =await requests.post(api_url, headers=headers, json=text)
 
-#     if response.status_code == 200:
-#         # print("Sound file downloaded successfully.")
-#         return response.content
-#     else:
-#         print(f"Error: {response.status_code}")
 async def generate_audio(text):
     """
     Fetches TTS audio data asynchronously from an external API.
@@ -260,7 +180,7 @@ def transcribe_audio(audio_data):
     try:
         # Create transcription request with raw bytes
         print("Got input Transcribing......")
-        response = client3.audio.transcriptions.create(
+        response = client_groq.audio.transcriptions.create(
             model="whisper-large-v3-turbo",
             file=("audio.wav", audio_data, "audio/wav"),
             response_format="text"
@@ -272,17 +192,6 @@ def transcribe_audio(audio_data):
         return None
 
 def play_audio(file_path,col2):
-    # if audio_data:
-    #     # Convert audio data to base64
-    #     b64 = base64.b64encode(audio_data).decode()
-    #     audio_html = f"""
-    #     <audio controls>
-    #         <source src="data:audio/wav;base64,{b64}" type="audio/wav">
-    #         Your browser does not support the audio element.
-    #     </audio>
-    #     """
-    #     with col2:
-    #         st.components.v1.html(audio_html, height=100)
     with col2:
         if file_path.endswith(".wav"):
             st.audio(file_path, format="audio/wav")
@@ -309,31 +218,6 @@ def split_text(text, max_length=980):
 
 
 
-# async def generate_audio_total(text,output_filename="output.mp3"):
-#     if len(text)<980:
-#         return await generate_audio(text)
-#     else:
-#         split_parts=split_text(text)
-#         combined_audio = AudioSegment.empty()
-        
-#         for text in split_parts:
-#             # Fetch raw audio content asynchronously
-#             audio_data = await generate_audio(text)
-            
-#             # Load the audio into a BytesIO buffer
-#             mp3_fp = io.BytesIO(audio_data)
-#             mp3_fp.seek(0)  # Reset pointer
-            
-#             # Load the audio with pydub
-#             segment = AudioSegment.from_file(mp3_fp, format="mp3")
-#             combined_audio += segment
-            
-#             mp3_fp.close()  # Close the in-memory buffer
-#         if os.path.exists(output_filename):
-#             os.remove(output_filename)
-#         # Save to a file
-#         combined_audio.export(output_filename, format="mp3")
-#         print(f"Final audio saved as: {output_filename}")
 
 async def generate_audio_total(text, output_filename="output.wav"):
     if len(text) < 980:
