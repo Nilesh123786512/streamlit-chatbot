@@ -203,43 +203,17 @@ if st.session_state.authenticated:
                 st.session_state.think = False
 
 
-                # Define the CSS for the blinking effect
-            if not model_number in long_context_models:
-                bot_message=st.chat_message("assistant",avatar=get_icon_no_and_value(model_number)[1])
-                blink_css = """
-                <style>
-                @keyframes blink {
-                    0% { opacity: 1; }
-                    50% { opacity: 0; }
-                    100% { opacity: 1; }
-                }
-                .blink {
-                    animation: blink 1s infinite;
-                }
-                </style>
-                """
-
-
-
-                bot_message.markdown(blink_css+'<p class="blink">Thinking</p>',
-                            unsafe_allow_html=True)
-            # print(search)
-            # print("all ready to send to AI")
-            # print(f'Searching is kept : {search}')
+            
             if model_number in long_context_models:
-                response =asyncio.run(query_openai(st.session_state.conversation,
-                                        model_number,
-                                        search=search,
-                                    temp=st.session_state.temp,
-                                    top_p=st.session_state.top_p)
-                                    )
+                _conv=st.session_state.conversation
             else:
-                response =asyncio.run(query_openai(st.session_state.input,
-                                        model_number,
-                                        search=search,
-                                    temp=st.session_state.temp,
-                                    top_p=st.session_state.top_p)
-                                    )
+                _conv=st.session_state.input
+            response =asyncio.run(query_openai(_conv,
+                                    model_number,
+                                    search=search,
+                                temp=st.session_state.temp,
+                                top_p=st.session_state.top_p)
+                                )
 
             st.session_state.conversation.append({
                 "role": "assistant",
