@@ -4,7 +4,7 @@ models_dict = {
     13: "deepseek/deepseek-chat-v3-0324:free",
     15: "meta-llama/llama-4-maverick:free",
     9: "deepseek/deepseek-chat:free",
-    17: "gemini-2.5-flash-preview-04-17",
+    17: "gemini-2.5-flash-preview-05-20",
     14: "gemini-2.5-pro-exp-03-25",
     1: "gemini-2.0-flash-thinking-exp-1219",
     3: "openai/gpt-4.1",
