@@ -12,10 +12,10 @@ models_dict = {
     0: "qwen-qwq-32b",
     4: "deepseek-r1-distill-llama-70b",
     10: "deepseek/deepseek-r1:free",
-    8: "gpt-4o-2024-05-13",
-    7: "claude-3-5-sonnet-20240620",
-    5: "deepseek-r1",
-    6: "deepseek-v3",
+    8: "provider-1/chatgpt-4o-latest",
+    7: "provider-1/deepseek-chat-v3-0324",
+    5: "provider-1/deepseek-r1",
+    6: "provider-1/deepseek-v3",
 }
 bot_icon_url=["icons/gemini.png",
               "icons/chatgpt.png",
@@ -26,7 +26,7 @@ user_icon_url="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRGWm7kgMH1P
 
 gemini_model_numbers=[11,14,17,1]
 chatgpt_model_numbers=[12,3,8]
-deepseek_model_numbers=[13,9,4,10,5,6]
+deepseek_model_numbers=[13,9,4,10,5,6,7]
 
 
 def get_icon_no_and_value(model_number):
