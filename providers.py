@@ -3,7 +3,7 @@ import streamlit as st
 from models_data import models_dict
 
 client_sree = OpenAI(
-    base_url="https://api.sree.shop/v1",
+    base_url="https://api.a4f.co/v1",
     api_key=st.secrets["devsdocode"])
 client_groq = OpenAI(
     base_url="https://api.groq.com/openai/v1",
@@ -31,7 +31,7 @@ def get_client(model_number):
     Takes the model number as input and returns the client and stream.
     '''
     if model_number in sree_model_numbers:
-        return client_sree,False
+        return client_sree,True
     elif model_number in openrouter_model_numbers:
         return client_openrouter,True
     elif model_number in google_model_numbers:
