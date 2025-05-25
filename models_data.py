@@ -13,9 +13,9 @@ models_dict = {
     4: "deepseek-r1-distill-llama-70b",
     10: "deepseek/deepseek-r1:free",
     8: "provider-1/chatgpt-4o-latest",
-    7: "provider-1/deepseek-ai/deepSeek-r1",
-    5: "provider-1/deepseek-ai/deepSeek-v3",
-    6: "provider-1/deepseek-ai/deepseek-v3-0324",
+    7: "provider-1/deepseek-ai/DeepSeek-R1",
+    5: "provider-1/deepseek-ai/DeepSeek-V3",
+    6: "provider-1/deepseek-ai/deepseek-v3",
 }
 bot_icon_url=["icons/gemini.png",
               "icons/chatgpt.png",
