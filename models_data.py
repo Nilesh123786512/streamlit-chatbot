@@ -1,9 +1,10 @@
 models_dict = {
+    8: "provider-2/gpt-4o",
+    19: "provider-2/gpt-4.1",
     12: "openai/gpt-4.1-mini",
     11: "gemini-2.0-flash",
     9: "deepseek/deepseek-chat:free",
     17: "gemini-2.5-flash-preview-05-20",
-    8: "provider-1/chatgpt-4o-latest",
     7: "provider-1/deepseek-ai/DeepSeek-R1",
     5: "provider-1/deepseek-ai/DeepSeek-V3",
     6: "provider-1/deepseek-ai/DeepSeek-V3-0324",
@@ -27,7 +28,7 @@ user_icon_url="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRGWm7kgMH1P
 
 
 gemini_model_numbers=[11,14,17,1]
-chatgpt_model_numbers=[12,3,8]
+chatgpt_model_numbers=[12,3,8,19]
 deepseek_model_numbers=[13,9,4,10,5,6,7]
 
 
