@@ -1,6 +1,6 @@
 models_dict = {
-    8: "provider-2/gpt-4o",
-    19: "provider-2/gpt-4.1",
+    8: "provider-4/gpt-4o",
+    19: "provider-4/gpt-4.1",
     12: "openai/gpt-4.1-mini",
     11: "gemini-2.0-flash",
     9: "deepseek/deepseek-chat:free",
