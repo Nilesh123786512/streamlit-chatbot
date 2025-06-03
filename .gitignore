@@ -4,5 +4,6 @@ test*
 test.py
 audio
 output.mp3
+__pycache__/
 todo.md
 test/
