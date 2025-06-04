@@ -1,6 +1,6 @@
 models_dict = {
-    8: "provider-2/gpt-4o",
-    19: "provider-2/gpt-4.1",
+    8: "provider-4/gpt-4o",
+    19: "provider-4/gpt-4.1",
     20: "provider-1/gpt-4.1-2025-04-14",
     12: "openai/gpt-4.1-mini",
     11: "gemini-2.0-flash",
@@ -12,6 +12,8 @@ models_dict = {
     14:"provider-4/gemini-2.5-pro-preview-05-06",
     16: "provider-4/claude-3.7-sonnet",
     18: "provider-4/claude-3.5-haiku",
+    21: "provider-2/gpt-4o",
+    22: "provider-2/gpt-4.1",
     1: "gemini-2.0-flash-thinking-exp-1219",
     3: "openai/gpt-4.1",
     13: "deepseek/deepseek-chat-v3-0324:free",
@@ -20,6 +22,7 @@ models_dict = {
     0: "qwen-qwq-32b",
     4: "deepseek-r1-distill-llama-70b",
     10: "deepseek/deepseek-r1:free",
+
 }
 bot_icon_url=["icons/gemini.png",
               "icons/chatgpt.png",
@@ -29,7 +32,7 @@ user_icon_url="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRGWm7kgMH1P
 
 
 gemini_model_numbers=[11,14,17,1]
-chatgpt_model_numbers=[12,3,8,19,20]
+chatgpt_model_numbers=[12,3,8,19,20,21,22]
 deepseek_model_numbers=[13,9,4,10,5,6,7]
 
 

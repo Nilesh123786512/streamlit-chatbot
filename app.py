@@ -4,17 +4,63 @@ from models_data import models_dict
 import streamlit as st
 import re
 import time
+import json # Added for JSON operations
+import os   # Added for path operations
 from utils import generate_audio_total, play_audio,replacer
 models_dict_reversed = {value: key for key, value in models_dict.items()}
 from models_data import user_icon_url, bot_icon_url,get_icon_no_and_value
+# --- Helper Functions for JSON ---
+def ensure_history_dir_exists():
+    if not os.path.exists(HISTORY_DIR):
+        try:
+            os.makedirs(HISTORY_DIR)
+        except OSError as e:
+            st.error(f"Error creating directory {HISTORY_DIR}: {e}")
 
+def save_to_json(filename, data):
+    ensure_history_dir_exists()
+    try:
+        with open(filename, 'w') as f:
+            json.dump(data, f, indent=4)
+        # st.sidebar.success(f"Data saved to {filename}") # Optional: uncomment for verbose feedback
+    except Exception as e:
+        st.sidebar.error(f"Error saving to {filename}: {e}")
+
+def load_from_json(filename):
+    try:
+        if os.path.exists(filename):
+            with open(filename, 'r') as f:
+                data = json.load(f)
+                return data
+    except FileNotFoundError:
+        # File not existing is a valid case for first run, so no error message here.
+        return None
+    except json.JSONDecodeError:
+        st.error(f"Error decoding JSON from {filename}. File might be corrupted. Using default.")
+        return None
+    except Exception as e:
+        st.error(f"Error loading from {filename}: {e}. Using default.")
+        return None
+    return None
+
+# --- Constants for File Paths ---
+HISTORY_DIR = "history"
+CONVERSATION_FILE = os.path.join(HISTORY_DIR, "conversation.json")
+ICONS_FILE = os.path.join(HISTORY_DIR, "icons.json")
+
+# --- System Prompt Definitions ---
+DEFAULT_SYSTEM_MESSAGE_CONTENT = "You are a helpful and concise assistant. Your primary goal is to directly address the user's most recent question or statement.  Use the preceding conversation history to understand the context and provide relevant background, but always ensure your response is primarily focused on and answers the *latest user input*.  If there are any ambiguities or contradictions between past messages and the latest message, assume the latest message is the most accurate representation of the user's current intent.if you retrieve search results while responding, please provide links that you got as it is,don't hallucinate links"
+DEFAULT_SYSTEM_PROMPT = {"role": "system", "content": DEFAULT_SYSTEM_MESSAGE_CONTENT}
+
+NEW_CHAT_SYSTEM_MESSAGE_CONTENT = "You are a helpful assistant."
+NEW_CHAT_SYSTEM_PROMPT = {"role": "system", "content": NEW_CHAT_SYSTEM_MESSAGE_CONTENT}
 st.set_page_config(
     page_title="My Chatbot",
     # page_icon="",
     layout="wide",
     initial_sidebar_state="expanded",
 )
-long_context_models=[1, 2, 3, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]
+long_context_models=[1, 2, 3, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22]
 
 if "authenticated" not in st.session_state:
     st.session_state.authenticated = False
@@ -44,24 +90,35 @@ if not st.session_state.authenticated:
             st.rerun()
 if st.session_state.authenticated:
     st.title("🤖 My Chatbot")
+
     # Initialize session state for conversation if not already present
     if "conversation" not in st.session_state:
-        st.session_state.conversation = [{
-            "role": "system",
-            "content": "You are a helpful and concise assistant. Your primary goal is to directly address the user's most recent question or statement.  Use the preceding conversation history to understand the context and provide relevant background, but always ensure your response is primarily focused on and answers the *latest user input*.  If there are any ambiguities or contradictions between past messages and the latest message, assume the latest message is the most accurate representation of the user's current intent.if you retrieve search results while responding, please provide links that you got as it is,don't hallucinate links"
-        }]
+        loaded_conversation = load_from_json(CONVERSATION_FILE)
+        if loaded_conversation and isinstance(loaded_conversation, list) and len(loaded_conversation) > 0:
+            st.session_state.conversation = loaded_conversation
+        else:
+            st.session_state.conversation = [DEFAULT_SYSTEM_PROMPT.copy()]
+
     if "input" not in st.session_state:
-        st.session_state.input = [{
-            "role": "system",
-            "content": "You are a helpful and concise assistant. Your primary goal is to directly address the user's most recent question or statement.  Use the preceding conversation history to understand the context and provide relevant background, but always ensure your response is primarily focused on and answers the *latest user input*.  If there are any ambiguities or contradictions between past messages and the latest message, assume the latest message is the most accurate representation of the user's current intent.if you retrieve search results while responding, please provide links that you got as it is,don't hallucinate links"
-        }]
+        # 'input' uses the same default system message initially.
+        # It will be reset with NEW_CHAT_SYSTEM_PROMPT if "New Chat" is clicked.
+        st.session_state.input = [DEFAULT_SYSTEM_PROMPT.copy()]
+
     if "icon_numbers" not in st.session_state:
-        st.session_state.icon_numbers = []
+        loaded_icons = load_from_json(ICONS_FILE)
+        if loaded_icons and isinstance(loaded_icons, list):
+            st.session_state.icon_numbers = loaded_icons
+        else:
+            st.session_state.icon_numbers = []
 
     with st.sidebar:
-        st.session_state.temp = st.slider("Temperature",0., 2.,0.6)
-        st.session_state.top_p = st.slider("Top_p",0., 1.,0.95)
+        st.session_state.temp = st.slider("Temperature", 0., 2., 0.6)
+        st.session_state.top_p = st.slider("Top_p", 0., 1., 0.95)
 
+        if st.button("Save Chat"):
+            save_to_json(CONVERSATION_FILE, st.session_state.conversation)
+            save_to_json(ICONS_FILE, st.session_state.icon_numbers)
+            st.sidebar.success("Chat saved!")
     hist_container = st.container()
     new_reply_container = st.container()
     main_container = st.container()
@@ -133,7 +190,7 @@ if st.session_state.authenticated:
                 for i in range(len(split_text)):
                     bot_message.markdown(split_text[i])  # Render text normally
                     if i < len(latex_blocks):  
-                        bot_message.latex(latex_blocks[i].strip()) 
+                        bot_message.latex(latex_blocks[i].strip())
                 
                 with col1:
                     if st.button("🔊", key=f"audio_button_{_ind}"):
@@ -220,8 +277,3 @@ if st.session_state.authenticated:
                 "content": response
             })
             st.rerun()
-
-                
-    
-
-    
