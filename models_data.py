@@ -6,7 +6,7 @@ models_dict = {
     11: "gemini-2.0-flash",
     9: "deepseek/deepseek-chat:free",
     17: "gemini-2.5-flash-preview-05-20",
-    7: "provider-2/deepseek-r1",
+    7: "provider-4/deepseek-r1-0528",
     5: "provider-1/deepseek-ai/DeepSeek-V3",
     6: "provider-1/deepseek/deepseek-chat-v3-0324",
     14:"provider-4/gemini-2.5-pro-preview-05-06",
