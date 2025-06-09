@@ -3,7 +3,7 @@ test.ipynb
 test*
 test.py
 audio/
-output.mp3
+output.wav
 __pycache__/
 todo.md
 test/

@@ -1,9 +1,0 @@
-test.ipynb
-.streamlit/secrets.toml
-test*
-test.py
-audio/
-output.wav
-__pycache__/
-todo.md
-test/

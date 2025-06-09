@@ -39,7 +39,7 @@ This project is a Streamlit-based chatbot application that leverages the power o
 *   **API Keys:** 🔑
     *   Devs Do Code API Key
     *   Groq API Key
-    *   Tavily API Key (Note: While Tavily is mentioned, the current implementation uses DuckDuckGo Search. This key might be for future use or an older implementation.)
+    *   Tavily API Key (Note: While Tavily is mentioned, the current implementation uses DuckDuckGo Search. This key is for  older implementation.)
     *   **Authentication Code:** A secret code for accessing the chatbot.
 
 ### Installation
@@ -183,5 +183,5 @@ This project is open-source and available under the [MIT License](LICENSE) (Repl
 *   [Nilesh123786512]
 
 ---
-**Disclaimer:** ⚠️ Please be aware of the terms of service and potential costs associated with using the Groq, Sree Shop, and Tavily APIs.
+**Disclaimer:** ⚠️ Please be aware of the terms of service and potential costs associated with using the Groq, a4f, and Tavily APIs.
 # streamlit-chatbot
