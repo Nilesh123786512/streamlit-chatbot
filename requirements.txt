@@ -1,0 +1,9 @@
+streamlit==1.43.0
+openai
+duckduckgo-search
+#google
+miniaudio
+# st-copy-to-clipboard
+#pydub
+#ffmpeg
+# tavily-python
