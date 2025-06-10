@@ -9,7 +9,9 @@ models_dict = {
     7: "provider-1/deepseek-ai/DeepSeek-R1",
     5: "provider-1/deepseek-ai/DeepSeek-V3",
     6: "provider-1/deepseek/deepseek-chat-v3-0324",
-    14:"provider-3/gemini-2.5-pro-preview-05-06",
+    14:"provider-3/gemini-2.5-pro-preview-06-05",
+    24:"provider-3/gemini-2.5-pro-preview-05-06",
+    25:"provider-3/o4-mini",
     16: "provider-3/claude-3.7-sonnet",
     18: "provider-3/claude-3.5-haiku",
     21: "provider-2/gpt-4o",
@@ -33,8 +35,8 @@ bot_icon_url=["icons/gemini.png",
 user_icon_url="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRGWm7kgMH1PEsycRwkyqPcPB1b2NITpD8j2g&s"
 
 
-gemini_model_numbers=[11,14,17,1]
-chatgpt_model_numbers=[12,3,8,19,20,21,22]
+gemini_model_numbers=[11,14,17,1,24]
+chatgpt_model_numbers=[12,3,8,19,20,21,22,25]
 deepseek_model_numbers=[13,9,4,10,5,6,7]
 claude_model_numbers=[16,18,23]
 

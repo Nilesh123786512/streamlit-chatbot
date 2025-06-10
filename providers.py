@@ -22,7 +22,7 @@ client_google = OpenAI(
 google_model_numbers=[1,11,17]
 github_model_numbers=[3,12]
 openrouter_model_numbers=[2,9, 10,13,15]
-sree_model_numbers=[5, 6, 7, 8, 14, 16, 18, 19, 20, 21, 22, 23]
+sree_model_numbers=[5, 6, 7, 8, 14, 16, 18, 19, 20, 21, 22, 23, 24, 25]
 
 
 
