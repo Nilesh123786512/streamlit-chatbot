@@ -10,13 +10,13 @@ models_dict = {
     5: "provider-3/deepseek-v3",
     6: "provider-3/deepseek-v3-0324",
     14:"provider-3/gemini-2.5-pro-preview-06-05",
-    24:"provider-3/gemini-2.5-pro-preview-05-06",
+    24:"provider-6/gemini-2.5-pro-preview-05-06",
     25:"provider-3/o4-mini",
-    16: "provider-3/claude-3.7-sonnet",
+    16: "provider-5/o3",
     18: "provider-3/claude-3.5-haiku",
     21: "provider-2/gpt-4o",
     22: "provider-2/gpt-4.1",
-    23: "provider-2/claude-opus-4",
+    23: "provider-5/o3-medium",
     1: "gemini-2.0-flash-thinking-exp-1219",
     3: "openai/gpt-4.1",
     13: "deepseek/deepseek-chat-v3-0324:free",
@@ -36,9 +36,9 @@ user_icon_url="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRGWm7kgMH1P
 
 
 gemini_model_numbers=[11,14,17,1,24]
-chatgpt_model_numbers=[12,3,8,19,20,21,22,25]
+chatgpt_model_numbers=[12,3,8,19,20,21,22,25,16,23]
 deepseek_model_numbers=[13,9,4,10,5,6,7]
-claude_model_numbers=[16,18,23]
+claude_model_numbers=[18]
 
 
 def get_icon_no_and_value(model_number):
