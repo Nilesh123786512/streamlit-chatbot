@@ -1,7 +1,7 @@
 models_dict = {
     8: "provider-3/gpt-4o",
     19: "provider-3/gpt-4.1",
-    20: "provider-1/gpt-4.1-2025-04-14",
+    20: "provider-5/chatgpt-4o-latest",
     12: "openai/gpt-4.1-mini",
     11: "gemini-2.0-flash",
     9: "deepseek/deepseek-chat:free",
@@ -9,7 +9,7 @@ models_dict = {
     7: "provider-3/deepseek-r1-0528",
     5: "provider-3/deepseek-v3",
     6: "provider-3/deepseek-v3-0324",
-    14:"provider-3/gemini-2.5-pro-preview-06-05",
+    14:"provider-6/gemini-2.5-pro-preview-06-05",
     24:"provider-6/gemini-2.5-pro-preview-05-06",
     25:"provider-3/o4-mini",
     16: "provider-5/o3",
