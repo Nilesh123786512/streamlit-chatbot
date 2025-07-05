@@ -1,7 +1,7 @@
 models_dict = {
     8: "gemini-2.5-flash-lite-preview-06-17",
     19: "gemini-2.5-flash",
-    20: "provider-5/gpt-4.1-mini",
+    20: "provider-6/gpt-4.1",
     12: "openai/gpt-4.1-mini",
     11: "gemini-2.5-pro",
     9: "deepseek/deepseek-chat:free",
@@ -14,7 +14,7 @@ models_dict = {
     25:"provider-1/deepseek-r1-0528",
     16: "provider-5/o3-low",
     18: "provider-3/claude-3.5-haiku",
-    21: "provider-3/gpt-4o-mini",
+    21: "provider-6/o3-medium",
     22: "provider-3/gpt-4.1-mini",
     23: "provider-5/deepseek-v3",
     1: "gemini-2.0-flash-thinking-exp-1219",
