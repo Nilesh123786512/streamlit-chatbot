@@ -1,22 +1,22 @@
 models_dict = {
     8: "gemini-2.5-flash-lite-preview-06-17",
     19: "gemini-2.5-flash",
-    20: "provider-6/gpt-4.1",
+    20: "provider-6/gpt-4o",
     12: "openai/gpt-4.1-mini",
     11: "gemini-2.5-pro",
     9: "deepseek/deepseek-chat:free",
     17: "gemini-2.5-flash-preview-05-20",
-    7: "provider-5/deepseek-r1",
+    7: "provider-6/o3-low",
     5: "provider-3/deepseek-v3",
     6: "provider-3/deepseek-v3-0324",
-    14:"provider-5/gemini-2.5-flash-preview-04-17",
-    24: "provider-5/deepseek-v3-0324",
+    14: "provider-1/gemini-2.5-pro",
+    24: "provider-6/deepseek-r1-uncensored",
     25:"provider-1/deepseek-r1-0528",
     16: "provider-5/o3-low",
     18: "provider-3/claude-3.5-haiku",
     21: "provider-6/o3-medium",
     22: "provider-3/gpt-4.1-mini",
-    23: "provider-5/deepseek-v3",
+    23: "provider-6/gpt-4.1",
     1: "gemini-2.0-flash-thinking-exp-1219",
     3: "openai/gpt-4.1",
     13: "deepseek/deepseek-chat-v3-0324:free",
@@ -36,8 +36,8 @@ user_icon_url="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRGWm7kgMH1P
 
 
 gemini_model_numbers=[11,14,17,1,8,19]
-chatgpt_model_numbers=[12,3,20,21,22,16]
-deepseek_model_numbers=[13,9,25,4,10,5,6,7,24,23]
+chatgpt_model_numbers=[12,3,20,21,22,16,23]
+deepseek_model_numbers=[13,9,25,4,10,5,6,7,24]
 claude_model_numbers=[18]
 
 
