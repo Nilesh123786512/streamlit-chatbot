@@ -4,7 +4,7 @@ models_dict = {
     20: "provider-6/o3-high",
     12: "openai/gpt-4.1-mini",
     11: "gemini-2.5-pro",
-    9: "deepseek/deepseek-chat:free",
+    9: "provider-3/qwen-3-235b-a22b-2507",
     17: "gemini-2.5-flash-preview-05-20",
     7: "provider-6/o3-low",
     5: "provider-3/deepseek-v3",
@@ -30,21 +30,21 @@ models_dict = {
 bot_icon_url=["icons/gemini.png",
               "icons/chatgpt.png",
               "icons/deepseek.png",
-              "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS9kk110z2F3XC0xHw7MFCXwHd4dk9qFlGTnS2TRLtTCg&s",
+              "https://registry.npmmirror.com/@lobehub/icons-static-png/1.56.0/files/dark/qwen-color.png",
               None]#"icons/default.png"]
 user_icon_url="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRGWm7kgMH1PEsycRwkyqPcPB1b2NITpD8j2g&s"
 
 
 gemini_model_numbers=[11,17,1,8,19,16,18]
 chatgpt_model_numbers=[12,3,20,21,22,23,7]
-deepseek_model_numbers=[13,9,25,4,10,5,6,24]
-claude_model_numbers=[]
+deepseek_model_numbers=[13,25,4,10,5,6,24]
+qwen_model_numbers=[2,9]
 
 ## Getting providers modelnumbers
 google_model_numbers=[1,8,11,17,19]
 github_model_numbers=[3,12]
-openrouter_model_numbers=[2,9, 10,13,15]
-sree_model_numbers=[5, 6, 7, 14, 16, 18, 20, 21, 22, 23, 24, 25]
+openrouter_model_numbers=[2, 10, 13, 15]
+sree_model_numbers=[5, 6, 7, 14, 16, 18, 20, 21, 22, 23, 24, 25, 9]
 
 def get_icon_no_and_value(model_number):
     """
@@ -63,7 +63,7 @@ def get_icon_no_and_value(model_number):
         return 1, bot_icon_url[1]
     elif model_number in deepseek_model_numbers:
         return 2, bot_icon_url[2]
-    elif model_number in claude_model_numbers:
+    elif model_number in qwen_model_numbers:
         return 3, bot_icon_url[3]
     else:
         return 4, bot_icon_url[4]
