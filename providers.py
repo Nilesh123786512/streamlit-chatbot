@@ -1,6 +1,6 @@
 from openai import OpenAI
 import streamlit as st
-from models_data import models_dict
+from models_data import *
 
 client_sree = OpenAI(
     base_url="https://api.a4f.co/v1",
@@ -17,12 +17,6 @@ client_openrouter = OpenAI(
 client_google = OpenAI(
     base_url="https://generativelanguage.googleapis.com/v1beta",
     api_key=st.secrets['google'])
-
-## Getting providers modelnumbers
-google_model_numbers=[1,8,11,17,19]
-github_model_numbers=[3,12]
-openrouter_model_numbers=[2,9, 10,13,15]
-sree_model_numbers=[5, 6, 7, 14, 16, 18, 20, 21, 22, 23, 24, 25]
 
 
 

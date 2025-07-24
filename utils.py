@@ -95,7 +95,10 @@ async def query_openai(conversation,
                        model_number=1,
                        search=False,
                        temp=0.5,
-                       top_p=0.95):
+                       top_p=0.95,
+                       role="Helpful Assistant",
+                       system_prompt="Try to respond in a freindly manner.Also try to be concise and to the point.",
+                       name="Niklesh"):
     """
     Send the conversation history to the OpenAI Chat API and return the assistant's response.
     """
@@ -112,6 +115,15 @@ async def query_openai(conversation,
         })
     try:
         conv=conversation.copy()
+        conv.append({
+                "role":
+                "system",
+                "content":
+                f"""
+                Act as {role} and {system_prompt}.
+                Adress the user with the name {name}.
+    """
+            })
         if model_number in google_model_numbers:
             conv.append({
                 "role":
