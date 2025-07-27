@@ -109,7 +109,7 @@ async def query_openai(conversation,
         print(f'response is provided by tavily {respo}')
         conversation.append({
             "role":
-            "system",
+            "user",
             "content":
             f"Additional context from recent search results: {respo}"
         })
@@ -117,9 +117,10 @@ async def query_openai(conversation,
         conv=conversation.copy()
         conv.append({
                 "role":
-                "system",
+                "user",
                 "content":
                 f"""
+                System Instructions:
                 Act as {role} and {system_prompt}.
                 Adress the user with the name {name}.
     """

@@ -21,16 +21,18 @@ models_dict = {
     1:  "gemini-2.0-flash-thinking-exp-1219",
     3:  "openai/gpt-4.1",
     13: "deepseek/deepseek-chat-v3-0324:free",
-    15: "meta-llama/llama-4-maverick:free",
-    0: "qwen-qwq-32b",
+    15: "provider-6/llama-4-maverick",
+    0: "qwen/qwen3-32b",
     4: "deepseek-r1-distill-llama-70b",
-    10: "deepseek/deepseek-r1:free",
+    10: "provider-6/r1-1776",
 
 }
 bot_icon_url=["icons/gemini.png",
               "icons/chatgpt.png",
               "icons/deepseek.png",
               "https://registry.npmmirror.com/@lobehub/icons-static-png/1.56.0/files/dark/qwen-color.png",
+              "https://registry.npmmirror.com/@lobehub/icons-static-png/1.56.0/files/dark/claude-color.png",
+              "https://registry.npmmirror.com/@lobehub/icons-static-png/1.56.0/files/light/meta-color.png",
               None]#"icons/default.png"]
 user_icon_url="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRGWm7kgMH1PEsycRwkyqPcPB1b2NITpD8j2g&s"
 
@@ -38,13 +40,15 @@ user_icon_url="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRGWm7kgMH1P
 gemini_model_numbers=[11,1,8,19,16,18]
 chatgpt_model_numbers=[12,3,20,21,22,23,7]
 deepseek_model_numbers=[13,25,4,10,5,6,24]
-qwen_model_numbers=[2,9,17]
+qwen_model_numbers=[0,2,9,17]
+claude_model_numbers=[]
+meta_model_numbers=[15]
 
 ## Getting providers modelnumbers
 google_model_numbers=[1,8,11,19]
 github_model_numbers=[3,12]
-openrouter_model_numbers=[2, 10, 13, 15]
-sree_model_numbers=[5, 6, 7, 14, 16, 18, 20, 21, 22, 23, 24, 25, 9, 17]
+openrouter_model_numbers=[2, 13]
+sree_model_numbers=[5, 6, 7, 14, 16, 18, 20, 21, 22, 23, 24, 25, 9, 17, 15, 10]
 
 def get_icon_no_and_value(model_number):
     """
@@ -65,5 +69,9 @@ def get_icon_no_and_value(model_number):
         return 2, bot_icon_url[2]
     elif model_number in qwen_model_numbers:
         return 3, bot_icon_url[3]
-    else:
+    elif model_number in claude_model_numbers:
         return 4, bot_icon_url[4]
+    elif model_number in meta_model_numbers:
+        return 5, bot_icon_url[5]
+    else:
+        return 6, bot_icon_url[6]
