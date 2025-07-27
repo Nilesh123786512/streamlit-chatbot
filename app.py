@@ -58,7 +58,7 @@ st_page_icon="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAOEAAADhCAMAAAAJbSJI
 st.set_page_config(
     page_title="My Chatbot",
     layout="wide",
-    page_icon=st_page_icon,
+    page_icon="icons/default.png",
     initial_sidebar_state="expanded",
 )
 long_context_models=[1, 2, 3, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22,23, 24, 25]
@@ -217,6 +217,7 @@ if st.session_state.authenticated:
                     if i < len(latex_blocks):  
                         bot_message.latex(latex_blocks[i].strip())
                 
+                st_did_rerun=False
                 with col1:
                     if st.button("🔊", key=f"audio_button_{_ind}"):
                         str=" ".join(split_text)
@@ -225,45 +226,34 @@ if st.session_state.authenticated:
                             play_audio(fil_audio_name,col2)
                     # Add regenerate button
                 with colrerun:
-                    model_number = models_dict_reversed.get(model)
                     if st.button("🔄", key=f"regenerate_{_ind}", help="Regenerate this response"):
+                        st_did_rerun=True
+                if st_did_rerun:
+                        model_number = models_dict_reversed.get(model)
                         #removing the last  bot message
                         st.session_state.conversation.pop()
                         st.session_state.icon_numbers.pop()
                         if model_number in long_context_models:
-                            response = asyncio.run(query_openai(
-                                st.session_state.conversation,
-                                model_number,
-                                search=search,
-                                temp=st.session_state.temp,
-                                top_p=st.session_state.top_p,
-                                role=st.session_state.role,
-                                system_prompt=st.session_state.system_prompt,
-                                name=st.session_state.username
-                            ))
-                            # Adding the new response to the conversation
-                            st.session_state.conversation.append({
-                                "role": "assistant",
-                                "content": response
-                            })
-                            st.rerun()
+                            _conv=st.session_state.conversation
                         else:
-                            response = asyncio.run(query_openai(
-                                st.session_state.input,
-                                model_number,
-                                search=search,
-                                temp=st.session_state.temp,
-                                top_p=st.session_state.top_p,
-                                role=st.session_state.role,
-                                system_prompt=st.session_state.system_prompt,
-                                name=st.session_state.username
-                            ))
-                            # Adding the new response to the conversation
-                            st.session_state.conversation.append({
-                                "role": "assistant",
-                                "content": response
-                            })
-                            st.rerun()
+                            _conv=st.session_state.input
+
+                        response = asyncio.run(query_openai(
+                            _conv,
+                            model_number,
+                            search=search,
+                            temp=st.session_state.temp,
+                            top_p=st.session_state.top_p,
+                            role=st.session_state.role,
+                            system_prompt=st.session_state.system_prompt,
+                            name=st.session_state.username
+                        ))
+                        # Adding the new response to the conversation
+                        st.session_state.conversation.append({
+                            "role": "assistant",
+                            "content": response
+                        })
+                        st.rerun()
 
 
 

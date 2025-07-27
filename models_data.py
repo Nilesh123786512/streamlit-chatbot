@@ -30,11 +30,11 @@ models_dict = {
 bot_icon_url=["icons/gemini.png",
               "icons/chatgpt.png",
               "icons/deepseek.png",
-              "https://registry.npmmirror.com/@lobehub/icons-static-png/1.56.0/files/dark/qwen-color.png",
-              "https://registry.npmmirror.com/@lobehub/icons-static-png/1.56.0/files/dark/claude-color.png",
-              "https://registry.npmmirror.com/@lobehub/icons-static-png/1.56.0/files/light/meta-color.png",
+              "icons/qwen.png",
+              "icons/claude.png",
+              "icons/meta.png",
               None]#"icons/default.png"]
-user_icon_url="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRGWm7kgMH1PEsycRwkyqPcPB1b2NITpD8j2g&s"
+user_icon_url="icons/user.png"
 
 
 gemini_model_numbers=[11,1,8,19,16,18]
