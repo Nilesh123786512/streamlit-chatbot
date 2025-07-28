@@ -98,7 +98,8 @@ async def query_openai(conversation,
                        top_p=0.95,
                        role="Helpful Assistant",
                        system_prompt="Try to respond in a freindly manner.Also try to be concise and to the point.",
-                       name="Niklesh"):
+                       name="Niklesh",
+                       reasoning_effort="high"):
     """
     Send the conversation history to the OpenAI Chat API and return the assistant's response.
     """
@@ -141,12 +142,24 @@ async def query_openai(conversation,
         icn_no,icn_url=get_icon_no_and_value(model_number)
         st.session_state.icon_numbers.append(icn_no)
         with st.spinner(text="Thinking...."):
-            response_ = client.chat.completions.create(
-                model=models_dict[model_number],
-                stream=isStream,
-                messages=conv,
-                temperature=temp,  
-                top_p=top_p)
+            if model_number in [3,12]:
+                response_ = client.chat.completions.create(
+                    model=models_dict[model_number],
+                    stream=isStream,
+                    messages=conv,
+                    temperature=temp,  
+                    top_p=top_p,
+                )
+            else:
+                response_ = client.chat.completions.create(
+                    model=models_dict[model_number],
+                    stream=isStream,
+                    messages=conv,
+                    temperature=temp,  
+                    top_p=top_p,
+                    reasoning_effort=reasoning_effort
+                )
+
         if isStream:
             with st.chat_message("assistant",avatar=icn_url):
                 return st.write_stream(stream_data_(response_)) 

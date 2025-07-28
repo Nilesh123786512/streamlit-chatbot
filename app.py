@@ -126,6 +126,7 @@ if st.session_state.authenticated:
         st.session_state.system_prompt=st.text_input(label="System prompt you need to give",value="Try to be concise.User is an undergraduate student.He is so intrested in learning about AI and ML. ")
         st.session_state.temp = st.slider("Temperature", 0., 2., 0.6)
         st.session_state.top_p = st.slider("Top_p", 0., 1., 0.95)
+        st.session_state.reasoning_effort=st.selectbox(label="Reasoning effort",options=["low", "medium", "high","none","default",None],index=2)
         if st.button("New Chat",key="new_chat_button_SIDEBAR"):
             st.session_state.conversation = [{
                 "role":
@@ -246,7 +247,8 @@ if st.session_state.authenticated:
                             top_p=st.session_state.top_p,
                             role=st.session_state.role,
                             system_prompt=st.session_state.system_prompt,
-                            name=st.session_state.username
+                            name=st.session_state.username,
+                            reasoning_effort=st.session_state.reasoning_effort
                         ))
                         # Adding the new response to the conversation
                         st.session_state.conversation.append({
@@ -293,7 +295,8 @@ if st.session_state.authenticated:
                                 top_p=st.session_state.top_p,
                                 role=st.session_state.role,
                                 system_prompt=st.session_state.system_prompt,
-                                name=st.session_state.username)
+                                name=st.session_state.username,
+                                reasoning_effort=st.session_state.reasoning_effort),
                                 )
 
             st.session_state.conversation.append({
