@@ -10,7 +10,7 @@ models_dict = {
     7: "provider-6/o3-low",
     5: "provider-3/deepseek-v3",
     6:  "provider-3/deepseek-v3-0324",
-    14: "provider-6/kimi-k2",
+    14: "provider-6/kimi-k2-instruct",
     24: "provider-6/deepseek-r1-uncensored",
     25: "provider-1/deepseek-r1-0528",
     2: "qwen/qwen3-coder:free",
