@@ -1,7 +1,8 @@
 models_dict = {
     8: "gemini-2.5-flash-lite-preview-06-17",
     19: "gemini-2.5-flash",
-    20: "provider-6/o3-high",
+    20: "provider-6/horizon-alpha",
+    21: "provider-6/o3-medium",
     12: "openai/gpt-4.1-mini",
     11: "gemini-2.5-pro",
     9: "provider-3/qwen-3-235b-a22b-2507",
@@ -13,9 +14,8 @@ models_dict = {
     24: "provider-6/deepseek-r1-uncensored",
     25: "provider-1/deepseek-r1-0528",
     2: "qwen/qwen3-coder:free",
-    16: "provider-1/gemini-2.5-pro",
+    16: "provider-6/o4-mini-medium",
     18: "provider-6/gemini-2.5-flash-thinking",
-    21: "provider-6/o3-medium",
     22: "provider-6/gpt-4o-mini-search-preview",
     23: "provider-6/gpt-4.1",
     1:  "gemini-2.0-flash-thinking-exp-1219",
@@ -37,8 +37,8 @@ bot_icon_url=["icons/gemini.png",
 user_icon_url="icons/user.png"
 
 
-gemini_model_numbers=[11,1,8,19,16,18]
-chatgpt_model_numbers=[12,3,20,21,22,23,7]
+gemini_model_numbers=[11,1,8,19,18]
+chatgpt_model_numbers=[12,3,20,21,22,23,7,16]
 deepseek_model_numbers=[13,25,4,10,5,6,24]
 qwen_model_numbers=[0,2,9,17]
 claude_model_numbers=[]
