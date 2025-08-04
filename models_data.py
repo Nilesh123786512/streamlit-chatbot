@@ -33,22 +33,27 @@ bot_icon_url=["icons/gemini.png",
               "icons/qwen.png",
               "icons/claude.png",
               "icons/meta.png",
+              "https://aimode.co/wp-content/uploads/2025/03/Kimi-AI-Logo.webp",
+              "https://raw.githubusercontent.com/zai-org/GLM-4.5/refs/heads/main/resources/logo.svg",
               None]#"icons/default.png"]
 user_icon_url="icons/user.png"
 
 
-gemini_model_numbers=[11,1,8,19,18]
-chatgpt_model_numbers=[12,3,20,21,23,7,16]
-deepseek_model_numbers=[13,25,4,10,5,6,24]
-qwen_model_numbers=[0,2,9,17]
-claude_model_numbers=[]
-meta_model_numbers=[15]
-
+bot_icon_dict={
+    "gemini":[11,1,8,19,18],
+    "chatgpt":[12,3,20,21,23,7,16],
+    "deepseek":[13,25,4,10,5,6,24],
+    "qwen":[0,2,9,17],
+    "claude":[],
+    "meta":[15],
+    "kimi":[14],
+    "zai":[22],
+}
 ## Getting providers modelnumbers
 google_model_numbers=[1,8,11,19]
 github_model_numbers=[3,12]
-openrouter_model_numbers=[2, 13]
-sree_model_numbers=[5, 6, 7, 14, 16, 18, 20, 21, 22, 23, 24, 25, 9, 17, 15, 10]
+openrouter_model_numbers=[2, 13, 22]
+sree_model_numbers=[5, 6, 7, 14, 16, 18, 20, 21, 23, 24, 25, 9, 17, 15, 10]
 
 def get_icon_no_and_value(model_number):
     """
@@ -60,18 +65,8 @@ def get_icon_no_and_value(model_number):
     Returns:
         tuple: A tuple containing the icon number and value.
     """
-
-    if model_number in gemini_model_numbers:
-        return 0, bot_icon_url[0]
-    elif model_number in chatgpt_model_numbers:
-        return 1, bot_icon_url[1]
-    elif model_number in deepseek_model_numbers:
-        return 2, bot_icon_url[2]
-    elif model_number in qwen_model_numbers:
-        return 3, bot_icon_url[3]
-    elif model_number in claude_model_numbers:
-        return 4, bot_icon_url[4]
-    elif model_number in meta_model_numbers:
-        return 5, bot_icon_url[5]
-    else:
-        return 6, bot_icon_url[6]
+    for i,model_type in enumerate(bot_icon_dict.keys()):
+        if model_number in bot_icon_dict[model_type]:
+            return i,bot_icon_url[i]
+    return i,bot_icon_url[i]
+    
