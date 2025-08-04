@@ -1,7 +1,7 @@
 models_dict = {
     8: "gemini-2.5-flash-lite-preview-06-17",
     19: "gemini-2.5-flash",
-    20: "provider-6/horizon-alpha",
+    20: "provider-6/horizon-beta",
     21: "provider-6/o3-medium",
     12: "openai/gpt-4.1-mini",
     11: "gemini-2.5-pro",
@@ -16,7 +16,7 @@ models_dict = {
     2: "qwen/qwen3-coder:free",
     16: "provider-6/o4-mini-medium",
     18: "provider-6/gemini-2.5-flash-thinking",
-    22: "provider-6/gpt-4o-mini-search-preview",
+    22: "z-ai/glm-4.5-air:free",
     23: "provider-6/gpt-4.1",
     1:  "gemini-2.0-flash-thinking-exp-1219",
     3:  "openai/gpt-4.1",
@@ -38,7 +38,7 @@ user_icon_url="icons/user.png"
 
 
 gemini_model_numbers=[11,1,8,19,18]
-chatgpt_model_numbers=[12,3,20,21,22,23,7,16]
+chatgpt_model_numbers=[12,3,20,21,23,7,16]
 deepseek_model_numbers=[13,25,4,10,5,6,24]
 qwen_model_numbers=[0,2,9,17]
 claude_model_numbers=[]
