@@ -123,9 +123,9 @@ if st.session_state.authenticated:
     with st.sidebar:
         st.session_state.username=st.text_input(label="Name chatbot need to adress you ",value="Nikilesh")
         st.session_state.role=st.text_input(label="Role for your chatbot",value="Experienced Teacher")
-        st.session_state.system_prompt=st.text_input(label="System prompt you need to give",value="Try to be concise. User is an undergraduate student. He is so interested in learning about AI and ML. **You should give the user the best learning experience with tables ,examples ,expressions ,emojis and whatever useful. Only use them if they make experience good.** No need of  using analogies, user knows about what he is asking. ")
+        st.session_state.system_prompt=st.text_input(label="System prompt you need to give",value="Try to be concise. User is an undergraduate student. He is so interested in learning about AI and ML. **You should give the user the best learning experience with examples ,expressions ,emojis, simple points, tables, simple english, graphs and whatever useful. Only use them if they make experience good.** No need of  using analogies, user knows about what he is asking. ")
         st.session_state.temp = st.slider("Temperature", 0., 2., 0.6)
-        st.session_state.top_p = st.slider("Top_p", 0., 1., 0.95)
+        st.session_state.top_p = st.slider("Top_p", 0., 1., 0.6)
         st.session_state.reasoning_effort=st.selectbox(label="Reasoning effort",options=["low", "medium", "high","none","default",None],index=2)
         if st.button("New Chat",key="new_chat_button_SIDEBAR"):
             st.session_state.conversation = [{
