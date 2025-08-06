@@ -14,7 +14,7 @@ models_dict = {
     24: "provider-6/deepseek-r1-uncensored",
     25: "provider-1/deepseek-r1-0528",
     2: "qwen/qwen3-coder:free",
-    16: "provider-6/o4-mini-medium",
+    16: "provider-6/gpt-oss-120b",
     18: "provider-6/gemini-2.5-flash-thinking",
     22: "z-ai/glm-4.5-air:free",
     23: "provider-6/gpt-4.1",
