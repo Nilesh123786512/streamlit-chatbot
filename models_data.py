@@ -5,6 +5,7 @@ models_dict = {
     21: "provider-6/o3-medium",
     12: "openai/gpt-4.1-mini",
     11: "gemini-2.5-pro",
+    0: "moonshotai/kimi-k2-instruct",
     9: "provider-3/qwen-3-235b-a22b-2507",
     17: "provider-6/qwen3-coder-480b-a35b",
     7: "provider-6/o3-low",
@@ -22,9 +23,8 @@ models_dict = {
     3:  "openai/gpt-4.1",
     13: "deepseek/deepseek-chat-v3-0324:free",
     15: "provider-6/llama-4-maverick",
-    0: "qwen/qwen3-32b",
     4: "deepseek-r1-distill-llama-70b",
-    10: "provider-6/r1-1776",
+    10: "openai/gpt-oss-120b",
 
 }
 bot_icon_url=["icons/gemini.png",
@@ -38,22 +38,23 @@ bot_icon_url=["icons/gemini.png",
               None]#"icons/default.png"]
 user_icon_url="icons/user.png"
 
+long_context_models=[0, 1, 2, 3, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22,23, 24, 25]
 
 bot_icon_dict={
     "gemini":[11,1,8,19,18],
-    "chatgpt":[12,3,20,21,23,7,16],
-    "deepseek":[13,25,4,10,5,6,24],
-    "qwen":[0,2,9,17],
+    "chatgpt":[12,3,20,21,23,7,16,10],
+    "deepseek":[13,25,4,5,6,24],
+    "qwen":[2,9,17],
     "claude":[],
     "meta":[15],
-    "kimi":[14],
+    "kimi":[14,0],
     "zai":[22],
 }
 ## Getting providers modelnumbers
 google_model_numbers=[1,8,11,19]
 github_model_numbers=[3,12]
 openrouter_model_numbers=[2, 13, 22]
-sree_model_numbers=[5, 6, 7, 14, 16, 18, 20, 21, 23, 24, 25, 9, 17, 15, 10]
+sree_model_numbers=[5, 6, 7, 14, 16, 18, 20, 21, 23, 24, 25, 9, 17, 15]
 
 def get_icon_no_and_value(model_number):
     """
