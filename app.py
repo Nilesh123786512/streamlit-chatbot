@@ -8,7 +8,7 @@ import json # Added for JSON operations
 import os   # Added for path operations
 from utils import generate_audio_total, play_audio,replacer
 models_dict_reversed = {value: key for key, value in models_dict.items()}
-from models_data import user_icon_url, bot_icon_url,get_icon_no_and_value
+from models_data import user_icon_url, bot_icon_url,get_icon_no_and_value,long_context_models
 # --- Helper Functions for JSON ---
 def ensure_history_dir_exists():
     if not os.path.exists(HISTORY_DIR):
@@ -61,7 +61,7 @@ st.set_page_config(
     page_icon="icons/default.png",
     initial_sidebar_state="expanded",
 )
-long_context_models=[1, 2, 3, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22,23, 24, 25]
+
 
 if "authenticated" not in st.session_state:
     st.session_state.authenticated = False
