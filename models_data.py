@@ -1,6 +1,7 @@
 models_dict = {
     8: "gemini-2.5-flash-lite-preview-06-17",
     19: "gemini-2.5-flash",
+    1:  "provider-3/gpt-5-nano",
     20: "provider-6/horizon-beta",
     21: "provider-6/o3-medium",
     12: "openai/gpt-4.1-mini",
@@ -19,7 +20,6 @@ models_dict = {
     18: "provider-6/gemini-2.5-flash-thinking",
     22: "z-ai/glm-4.5-air:free",
     23: "provider-6/gpt-4.1",
-    1:  "gemini-2.0-flash-thinking-exp-1219",
     3:  "openai/gpt-4.1",
     13: "deepseek/deepseek-chat-v3-0324:free",
     15: "provider-6/llama-4-maverick",
@@ -41,8 +41,8 @@ user_icon_url="icons/user.png"
 long_context_models=[0, 1, 2, 3, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22,23, 24, 25]
 
 bot_icon_dict={
-    "gemini":[11,1,8,19,18],
-    "chatgpt":[12,3,20,21,23,7,16,10],
+    "gemini":[11,8,19,18],
+    "chatgpt":[12,3,20,21,23,7,16,10,1],
     "deepseek":[13,25,4,5,6,24],
     "qwen":[2,9,17],
     "claude":[],
@@ -51,10 +51,10 @@ bot_icon_dict={
     "zai":[22],
 }
 ## Getting providers modelnumbers
-google_model_numbers=[1,8,11,19]
+google_model_numbers=[8,11,19]
 github_model_numbers=[3,12]
 openrouter_model_numbers=[2, 13, 22]
-sree_model_numbers=[5, 6, 7, 14, 16, 18, 20, 21, 23, 24, 25, 9, 17, 15]
+sree_model_numbers=[1, 5, 6, 7, 14, 16, 18, 20, 21, 23, 24, 25, 9, 17, 15]
 
 def get_icon_no_and_value(model_number):
     """
