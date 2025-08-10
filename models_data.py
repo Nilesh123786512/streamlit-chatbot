@@ -3,13 +3,15 @@ models_dict = {
     19: "gemini-2.5-flash",
     1:  "provider-3/gpt-5-nano",
     14: "provider-3/kimi-k2",
+    0: "moonshotai/kimi-k2-instruct",
+    4: "deepseek-r1-distill-llama-70b",
+    10: "openai/gpt-oss-120b",
     20: "provider-6/horizon-beta",
     21: "provider-6/o3-medium",
     12: "xai/grok-3",
     26: "xai/grok-3-mini",
     27: "openai/gpt-4.1-mini",
     11: "gemini-2.5-pro",
-    0: "moonshotai/kimi-k2-instruct",
     9: "provider-3/qwen-3-235b-a22b-2507",
     17: "provider-6/qwen3-coder-480b-a35b",
     7: "provider-6/o3-low",
@@ -24,9 +26,7 @@ models_dict = {
     23: "provider-6/gpt-4.1",
     3:  "openai/gpt-4.1",
     13: "deepseek/deepseek-chat-v3-0324:free",
-    15: "provider-6/llama-4-maverick",
-    4: "deepseek-r1-distill-llama-70b",
-    10: "openai/gpt-oss-120b",
+    15: "meta-llama/llama-4-scout-17b-16e-instruct",
 
 }
 bot_icon_url=["icons/gemini.png",
@@ -58,7 +58,7 @@ bot_icon_dict={
 google_model_numbers=[8,11,19]
 github_model_numbers=[3,12,26,27]
 openrouter_model_numbers=[2, 13, 22]
-sree_model_numbers=[1, 5, 6, 7, 14, 16, 18, 20, 21, 23, 24, 25, 9, 17, 15]
+sree_model_numbers=[1, 5, 6, 7, 14, 16, 18, 20, 21, 23, 24, 25, 9, 17]
 
 def get_icon_no_and_value(model_number):
     """
