@@ -4,10 +4,10 @@ models_dict = {
     1:  "provider-3/gpt-5-nano",
     14: "provider-3/kimi-k2",
     0: "moonshotai/kimi-k2-instruct",
-    4: "deepseek-r1-distill-llama-70b",
     10: "openai/gpt-oss-120b",
     20: "provider-6/horizon-beta",
     21: "provider-6/o3-medium",
+    15: "meta-llama/llama-4-scout-17b-16e-instruct",
     12: "xai/grok-3",
     26: "xai/grok-3-mini",
     27: "openai/gpt-4.1-mini",
@@ -26,7 +26,7 @@ models_dict = {
     23: "provider-6/gpt-4.1",
     3:  "openai/gpt-4.1",
     13: "deepseek/deepseek-chat-v3-0324:free",
-    15: "meta-llama/llama-4-scout-17b-16e-instruct",
+    4: "deepseek-r1-distill-llama-70b",
 
 }
 bot_icon_url=["icons/gemini.png",
