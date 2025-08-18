@@ -7,7 +7,8 @@ models_dict = {
     10: "openai/gpt-oss-120b",
     16: "provider-2/glm-4.5-air",
     21: "provider-6/o3-medium",
-    15: "meta-llama/llama-4-scout-17b-16e-instruct",
+    15: "provider-6/gpt-4o",
+    20: "meta-llama/llama-4-scout-17b-16e-instruct",
     12: "xai/grok-3",
     26: "xai/grok-3-mini",
     27: "openai/gpt-4.1-mini",
@@ -25,7 +26,7 @@ models_dict = {
     23: "provider-6/gpt-4.1",
     3:  "openai/gpt-4.1",
     13: "deepseek/deepseek-chat-v3-0324:free",
-    4: "deepseek-r1-distill-llama-70b",
+    4:  "deepseek-r1-distill-llama-70b",
 
 }
 bot_icon_url=["icons/gemini.png",
@@ -44,11 +45,11 @@ long_context_models=[0, 1, 2, 3, 5, 6, 7, 8, 9, 10, 11, 13, 14, 15, 16, 17, 18, 
 
 bot_icon_dict={
     "gemini":[11,8,19,18],
-    "chatgpt":[3,21,23,7,10,1,27],
+    "chatgpt":[3,21,23,7,10,1,27,15],
     "deepseek":[13,25,4,5,6,24],
     "qwen":[2,9,17],
     "claude":[],
-    "meta":[15],
+    "meta":[20],
     "kimi":[14,0],
     "zai":[22,16],
     "grok":[12,26]
@@ -57,7 +58,7 @@ bot_icon_dict={
 google_model_numbers=[8,11,19]
 github_model_numbers=[3,12,26,27]
 openrouter_model_numbers=[2, 13, 22]
-sree_model_numbers=[1, 5, 6, 7, 14, 16, 18,  21, 23, 24, 25, 9, 17]
+sree_model_numbers=[1, 5, 6, 7, 14, 15, 16, 18,  21, 23, 24, 25, 9, 17]
 
 def get_icon_no_and_value(model_number):
     """

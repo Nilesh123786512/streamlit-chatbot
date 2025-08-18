@@ -25,7 +25,9 @@ def get_client(model_number):
     Takes the model number as input and returns the client and stream.
     '''
     if model_number in sree_model_numbers:
-        return client_sree,True
+        stream_not_models=[15]
+        bool=False if model_number in stream_not_models else True
+        return client_sree,bool
     elif model_number in openrouter_model_numbers:
         return client_openrouter,True
     elif model_number in google_model_numbers:
@@ -33,6 +35,8 @@ def get_client(model_number):
     elif model_number in github_model_numbers:
         return client_github,True
     else:
-        return client_groq,False
+        stream_not_models=[4]
+        bool=False if model_number in stream_not_models else True
+        return client_groq,bool
 
 
