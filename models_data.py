@@ -3,10 +3,11 @@ models_dict = {
     19: "gemini-2.5-flash",
     0: "moonshotai/kimi-k2-instruct",
     1:  "provider-3/gpt-5-nano",
+    21: "provider-3/deepseek-v3.1",
     14: "provider-3/kimi-k2",
     10: "openai/gpt-oss-120b",
     16: "provider-2/glm-4.5-air",
-    21: "provider-6/o3-medium",
+    23: "provider-1/glm-4.5-fp8",
     15: "provider-6/gpt-4o",
     20: "meta-llama/llama-4-scout-17b-16e-instruct",
     12: "xai/grok-3",
@@ -23,7 +24,6 @@ models_dict = {
     2: "qwen/qwen3-coder:free",
     18: "provider-6/gemini-2.5-flash-thinking",
     22: "z-ai/glm-4.5-air:free",
-    23: "provider-6/gpt-4.1",
     3:  "openai/gpt-4.1",
     13: "deepseek/deepseek-chat-v3-0324:free",
     4:  "deepseek-r1-distill-llama-70b",
@@ -31,7 +31,7 @@ models_dict = {
 }
 bot_icon_url=["icons/gemini.png",
               "icons/chatgpt.png",
-              "icons/deepseek.png",
+              "icons/deepseek.png
               "icons/qwen.png",
               "icons/claude.png",
               "icons/meta.png",
@@ -45,13 +45,13 @@ long_context_models=[0, 1, 2, 3, 5, 6, 7, 8, 9, 10, 11, 13, 14, 15, 16, 17, 18, 
 
 bot_icon_dict={
     "gemini":[11,8,19,18],
-    "chatgpt":[3,21,23,7,10,1,27,15],
-    "deepseek":[13,25,4,5,6,24],
+    "chatgpt":[3,7,10,1,27,15],
+    "deepseek":[13,21,25,4,5,6,24],
     "qwen":[2,9,17],
     "claude":[],
     "meta":[20],
     "kimi":[14,0],
-    "zai":[22,16],
+    "zai":[22,16,23],
     "grok":[12,26]
 }
 ## Getting providers modelnumbers
