@@ -31,7 +31,7 @@ models_dict = {
 }
 bot_icon_url=["icons/gemini.png",
               "icons/chatgpt.png",
-              "icons/deepseek.png
+              "icons/deepseek.png",
               "icons/qwen.png",
               "icons/claude.png",
               "icons/meta.png",
